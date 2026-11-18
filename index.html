@@ -157,8 +157,8 @@ const mob=()=>matchMedia('(max-width:820px)').matches;
 const $=id=>document.getElementById(id);
 const maps=(n,a)=>'https://www.google.com/maps/search/?api=1&hl='+LANG+'&query='+encodeURIComponent(n+' '+(a||'')+' '+CONFIG.city);
 const dir=(lat,lng)=>`https://www.google.com/maps/dir/?api=1&hl=${LANG}&origin=${encodeURIComponent(CONFIG.startQuery)}&destination=${lat},${lng}&travelmode=transit`;
-const CATLBL={all:'全部',super:'🛒 超市',coffee:'☕ 咖啡',eat:'🥐 小吃·午餐',sweet:'🍰 必吃甜點'};
-const CATCOL={super:'#2e7d32',coffee:'#6d4c41',eat:'#e63946',sweet:'#d81b60'};
+const CATLBL={all:'全部',super:'🛒 超市',coffee:'☕ 咖啡',eat:'🥐 小吃·午餐',sweet:'🍰 必吃甜點',paella:'🥘 海鮮飯'};
+const CATCOL={super:'#2e7d32',coffee:'#6d4c41',eat:'#e63946',sweet:'#d81b60',paella:'#0d7fa5'};
 const PLE={1:'💲 省',2:'💲💲 中',3:'💲💲💲 偏高'};
 const AREAOF={batllo:'batllo',milà:'batllo',guell:'guell',sagrada:'sagrada',fireareis:'fireareis',montserrat:'montserrat',dali:'dali',nadalport:'port'};
 const findObj=id=>FIX.find(x=>x.id===id)||PICKS.find(x=>x.id===id)||EATS.find(x=>x.id===id);
@@ -221,7 +221,7 @@ function eatAcc(e){
 const mini=(o,price)=>`<button class="mini" data-map="${o.id}"><span class="e">${o.ic}</span><b>${short(o.n)}</b><i>${price||''}</i></button>`;
 function nearHtml(f,shown){
  const area=AREAOF[f.id];let h='';
- const eats=(area&&!shown.has(area))?EATS.filter(e=>e.near===area&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,10):[];
+ const eats=(area&&!shown.has(area))?EATS.filter(e=>e.near===area&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,14):[];
  if(area)shown.add(area);
  const picks=PICKS.filter(p=>p.with[0]===f.id);
  if(picks.length)h+=`<div class="nh">🎯 順路可玩／逛</div><div class="scroll">${picks.map(p=>mini(p,p.cat)).join('')}</div>`;
@@ -247,7 +247,7 @@ function render(){
    const free=PICKS.filter(p=>p.day===D.d&&p.with[0]==='free');
    if(free.length)body+=`<div class="near"><div class="nh">🎯 今日推薦</div><div class="scroll">${free.map(p=>mini(p,p.cat)).join('')}</div></div>`;
    const ar=(DAYAREA[D.d]||[]).filter(a=>!shown.has(a));
-   const es=EATS.filter(e=>ar.includes(e.near)&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,10);
+   const es=EATS.filter(e=>ar.includes(e.near)&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,14);
    if(es.length)body+=`<div class="near"><div class="nh">🍴 今日順路吃喝</div><div class="scroll">${es.map(e=>mini(e,PLE[e.p])).join('')}</div></div>`;
    const sights=fx.map(f=>short(f.n)).join('、')||'機動日';
    h+=`<div class="day ${isOpen?'open':''}" data-day="${D.d}"><button class="dh" data-dayt="${D.d}"><span class="dnum" style="background:${DAYCOL[D.d-1]}">${D.d}<small>${dayStr(D.d)[0]}</small></span><span class="dt"><b>${D.t}</b><em>${dayStr(D.d)[1]}｜${sights}</em></span><span class="chev">▾</span></button><div class="db">${body}</div></div>`;

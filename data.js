@@ -93,7 +93,7 @@ const PICKS=[
 ];
 
 // ===== 美食補給：超市 / 咖啡 / 小吃·午餐（標記為概略位置，點地圖連結以店名搜尋最準）=====
-const AREA={hotel:'🏨 市中心周邊',batllo:'🐉 巴特由·米拉',sagrada:'⛪ 聖家堂',guell:'🦎 桂爾公園·Gràcia',fireareis:'🎄 Sant Antoni·聖誕市集',montjuic:'🌇 Montjuïc·Poble-sec',port:'⚓ 港口·Born·Barceloneta',montserrat:'⛰️ 聖山',dali:'🎨 Figueres 達利'};
+const AREA={hotel:'🏨 市中心周邊',batllo:'🐉 巴特由·米拉',sagrada:'⛪ 聖家堂',guell:'🦎 桂爾公園·Gràcia',fireareis:'🎄 Sant Antoni·聖誕市集',montjuic:'🌇 Montjuïc·Poble-sec',port:'⚓ 港口·Born·Barceloneta',montserrat:'⛰️ 聖山',dali:'🎨 Figueres 達利',poblenou:'🌊 Poblenou 海邊'};
 const EATS=[
 {id:'e1',hours:"週日與國定假日多數休息，平日時間請看地圖",price:"依購買內容",cat:'super',n:'Carrefour Express（Gran Via 573，近 Universitat）',en:'Carrefour Express Gran Via 573',ic:'🛒',lat:41.3857,lng:2.1612,addr:'Gran Via de les Corts Catalanes 573',near:'hotel',p:1,why:'離市中心最近的超市之一，買水、水果、優格、三明治。資料來自較舊的指南，請先用地圖確認仍營業。',warn:1},
 {id:'e2',hours:"週日與國定假日多數休息，平日時間請看地圖",price:"依購買內容（平價）",cat:'super',n:'Mercadona（Consell de Cent 301）',en:'Mercadona Consell de Cent 301',ic:'🛒',lat:41.3925,lng:2.1657,addr:'Carrer del Consell de Cent 301',near:'batllo',p:1,why:'西班牙平價連鎖超市，離 Passeig de Gràcia 近，適合買零食與熟食。',warn:1},
@@ -118,6 +118,11 @@ const EATS=[
 {id:'s4',cat:'sweet',n:'Bubó（得獎巧克力甜點）',en:'Bubó Born',ic:'🍫',lat:41.3836,lng:2.1829,addr:'Carrer de les Caputxes 10',near:'port',p:3,why:'Born 區知名精緻甜點與巧克力，價位偏高；各來源對分店位置說法不一，請看地圖。',warn:1},
 {id:'s5',cat:'sweet',n:'Pastisseria Mauri（1929 年創立）',en:'Pastisseria Mauri',ic:'🎂',lat:41.3955,lng:2.1613,addr:'Rambla de Catalunya 102',near:'batllo',p:2,why:'傳統甜點與茶室，離米拉之家步行約 8 分；三王節前後也有國王蛋糕。',warn:1},
 {id:'s6',cat:'sweet',n:'La Colmena（Xuixo 奶油炸甜甜圈）',en:'La Colmena pastry Barcelona',ic:'🍩',lat:41.3846,lng:2.1759,addr:'Plaça de l\'Àngel 12',near:'hotel',p:1,why:'1849 年老店，必吃 xuixo（卡士達餡炸捲，加泰隆尼亞點心）；離哥德區大教堂近。',warn:1},
+{id:'pa1',cat:'paella',n:'Els Pescadors（Poblenou 海邊廣場）',en:'Els Pescadors Poblenou',ic:'🥘',lat:41.3995,lng:2.2069,addr:'Plaça de Prim 1',near:'poblenou',p:2,price:'海鮮飯約 €20–30／人（估計）',why:'書本推薦（海鮮分類）；2026 指南稱為最佳海鮮飯之一，也是少數拿到 Repsol Sol 的米飯餐廳。環境安靜，在 Poblenou 老廣場。⚠️ 依網路推薦收錄，Google 星數與評論數未核對。',warn:1},
+{id:'pa2',cat:'paella',n:'Can Solé（Barceloneta 老店）',en:'Can Solé Barceloneta',ic:'🦐',lat:41.3789,lng:2.1884,addr:'Carrer de Sant Carles 4',near:'port',p:2,price:'海鮮飯約 €22–32／人（估計）',why:'1903 年老店，多篇指南列為海鮮飯與墨魚飯（arroz negro）的標竿。1/8 港口日午餐首選。⚠️ 依網路推薦收錄；其他網站評分 4.3（Evendo，非 Google），Google 星數未核對。',warn:1},
+{id:'pa3',cat:'paella',n:'7 Portes（Paella Parellada）',en:'7 Portes Barcelona',ic:'🍤',lat:41.3821,lng:2.1833,addr:"Passeig d'Isabel II 14",near:'port',p:3,price:'海鮮飯約 €25–35／人（估計，價位偏高）',why:'歷史悠久的大餐廳，招牌 Paella Parellada 的海鮮已剝殼，吃起來方便。靠近 Born 與港口。⚠️ 依網路推薦收錄，Google 星數未核對。',warn:1},
+{id:'pa4',cat:'paella',n:'Sal Mar（Barceloneta 海濱）',en:'Sal Mar Barceloneta',ic:'🌊',lat:41.381,lng:2.1936,addr:'Barceloneta',near:'port',p:2,price:'海鮮飯約 €20–30／人（估計）',why:'Barceloneta 海濱步道的海鮮飯店，在評分彙整站上評論數很多（約 1.4 萬則，非 Google）。⚠️ 地址請看地圖；依網路推薦收錄，Google 星數未核對。',warn:1},
+{id:'pa5',cat:'paella',n:'Mesón Barceloneta',en:'Meson Barceloneta',ic:'🥘',lat:41.3806,lng:2.1874,addr:'Barceloneta',near:'port',p:2,price:'海鮮飯約 €22 起（單一來源 €22.5，需確認）',why:'Barceloneta 的家常海鮮飯店，有網站排名第一的推薦。⚠️ 地址請看地圖；依網路推薦收錄，Google 星數未核對。',warn:1},
 {id:'f1',hours:"平日午餐約 13:00–16:00 有套餐；其他時間請看地圖",price:"午間套餐約 €15 以內（需確認現價）",cat:'eat',n:'La Rita（午間套餐）',en:'La Rita Barcelona',ic:'🍽️',lat:41.3926,lng:2.1634,addr:'Carrer d\'Aragó 279',near:'batllo',p:1,why:'Passeig de Gràcia 附近，有人推薦的午間套餐（約 €15 以內，請以現價為準）。',warn:1},
 {id:'f2',hours:"未查到，請看 Google 地圖；人多常需等位",price:"午間套餐約 €13（需確認現價）",cat:'eat',n:'Cervecería Catalana（午間套餐約 €13）',en:'Cervecería Catalana',ic:'🍺',lat:41.3943,lng:2.1627,addr:'Carrer de Mallorca 236',near:'batllo',p:2,why:'書本推薦；離巴特由之家步行 5 分，午餐有 €13 左右的套餐（需確認現價），人多要等位。'},
 {id:'f3',cat:'eat',n:'Tapas 24',en:'Tapas 24',ic:'🍤',lat:41.3912,lng:2.1647,addr:'Carrer de la Diputació 269',near:'batllo',p:1,why:'書本推薦，Passeig de Gràcia 旁的平價 Tapas。'},
@@ -136,5 +141,5 @@ const EATS=[
 {id:'f16',cat:'eat',n:'Montserrat 山上 Mató 配蜂蜜',en:'Montserrat plaza mató honey',ic:'🍯',lat:41.5934,lng:1.8378,addr:'Plaça de la Creu, Montserrat',near:'montserrat',p:1,why:'山上特產：Mató（鮮乳酪）淋蜂蜜，以及自助餐廳。搜尋沒找到可靠店名，現場看。',warn:1}
 ];
 const EAREA_ORDER=Object.keys(AREA);
-const DAYAREA={1:['batllo','hotel'],2:['guell','sagrada'],3:['fireareis'],4:['montserrat'],5:['dali'],6:['montjuic'],7:['hotel','port'],8:['port','sagrada'],9:['hotel']};
+const DAYAREA={1:['batllo','hotel'],2:['guell','sagrada'],3:['fireareis'],4:['montserrat'],5:['dali'],6:['montjuic'],7:['hotel','port'],8:['port','poblenou','sagrada'],9:['hotel']};
 const ANCH={fireareis:'聖誕市集',batllo:'巴特由之家',milà:'米拉之家',guell:'桂爾公園',sagrada:'聖家堂',espanyol:'球賽',montserrat:'聖山',free:'機動日/無確定景點'};
