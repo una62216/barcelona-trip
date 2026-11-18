@@ -142,46 +142,10 @@ ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="zones.js"></script>
 <script>
 const RED='#d93a3a',ORA='#ee8a1f',GRN='#2e9b57';
 const LV={red:['🔴 高風險',RED],ora:['🟠 中風險',ORA],grn:['🟢 較安全',GRN]};
-// 區域（概略範圍）。poly: [[lat,lng],...]  circle: [lat,lng,radius_m]
-const ZONES=[
-{id:'z1',lv:'red',n:'La Rambla（全段，尤其下段近 Drassanes／哥倫布）',poly:[[41.3877,2.1688],[41.3877,2.1718],[41.3756,2.1798],[41.3748,2.1758]],
- why:'來源一致點名為扒手最密集區之一；餐廳外攬客與街頭表演也常是分散注意力的手法。',tip:'白天走過可以，不要停下來滑手機；包包斜背放前面；晚上避免久留。'},
-{id:'z2',lv:'red',n:'哥德區 Barri Gòtic（夜間小巷）',poly:[[41.3862,2.1738],[41.3862,2.1792],[41.3790,2.1792],[41.3790,2.1738]],
- why:'遊客多、小巷多、夜間照明差，被點名為 Ciutat Vella 扒手壓力最大的區域。',tip:'白天逛大教堂與 Plaça Sant Jaume 沒問題；晚上走寬的街道，離開時搭計程車更安心。'},
-{id:'z3',lv:'red',n:'El Raval 南段（Sant Pau 一帶，Rambla del Raval 夜間）',poly:[[41.3800,2.1650],[41.3800,2.1722],[41.3742,2.1712],[41.3742,2.1650]],
- why:'2026/3 報導將 El Raval 列為西班牙治安關注度高的社區之一；但不同旅遊指南說法不一。',tip:'避免天黑後走小巷與地下道；不要在街頭拿出貴重物品；白天可逛博物館與市集。'},
-{id:'z4',lv:'ora',n:'El Raval 北段、Plaça Universitat 周邊',poly:[[41.3875,2.1630],[41.3875,2.1715],[41.3802,2.1715],[41.3802,2.1630]],
- why:'靠近大學與 Plaça Catalunya，白天正常，夜間與 Raval 南段交界要小心。',tip:'夜間走大馬路（Ronda Universitat、Ronda Sant Antoni）而不是小巷。'},
-{id:'z5',lv:'ora',n:'Born／Sant Pere（Santa Caterina、Picasso 博物館周邊）',poly:[[41.3875,2.1790],[41.3875,2.1868],[41.3822,2.1868],[41.3822,2.1790]],
- why:'旅遊餐廳與酒吧集中，人潮多；一般指南列為需留意隨身物品的區域。',tip:'餐廳露天座位把包包放在腿上或繞住椅腳。'},
-{id:'z6',lv:'ora',n:'Barceloneta 與港口、海灘',poly:[[41.3815,2.1835],[41.3815,2.1940],[41.3720,2.1940],[41.3720,2.1835]],
- why:'海灘與酒吧街人潮多；有來源提到旅遊夜店有零星飲料下藥通報。',tip:'海邊別把背包放在沙灘上離開；夜店飲料不離手。'},
-{id:'z7',lv:'ora',n:'Passeig de Gràcia／Plaça Catalunya（巴特由、米拉）',circle:[41.3915,2.1655,430],
- why:'精品街與景點集中；Plaça Catalunya、Passeig de Gràcia 地鐵站被點名為扒手熱點。',tip:'拍照時把包包放前面；地鐵站內留意貼近與推擠。'},
-{id:'z8',lv:'ora',n:'聖家堂周邊',circle:[41.4036,2.1744,420],
- why:'世界級景點，排隊與廣場人潮多，一般為「人多的地方就有扒手」。',tip:'排隊時背包放胸前；證件正本放住處。'},
-{id:'z9',lv:'ora',n:'桂爾公園入口與公車站',circle:[41.4140,2.1535,320],
- why:'公車 24 與入口人擠，上下車與進出公園時容易被分散注意力。',tip:'手機、錢包放內袋；不要把手機拿在手上走。'},
-{id:'z10',lv:'grn',n:'Eixample（住宅區，Passeig de Gràcia 以西）',poly:[[41.3985,2.1480],[41.3985,2.1600],[41.3790,2.1600],[41.3790,2.1480]],
- why:'多份指南列為相對安全的住宿區：街道寬、住宅多、人流分散。',tip:'仍要留意手機與包包，但夜間走起來比老城區安心。'},
-{id:'z11',lv:'grn',n:'Gràcia',poly:[[41.4080,2.1480],[41.4080,2.1612],[41.3992,2.1612],[41.3992,2.1480]],
- why:'當地人多、咖啡店與小店多的社區，一般指南視為較安全（本次搜尋沒找到專門的 Gràcia 評比）。',tip:'廣場夜間酒吧人多，注意酒後的隨身物品。'},
-{id:'z12',lv:'grn',n:'Sarrià–Sant Gervasi（上城區）',poly:[[41.4180,2.1000],[41.4180,2.1480],[41.3985,2.1480],[41.3985,2.1000]],
- why:'被形容為安靜、安全的住宅區。',tip:'夜間大街上較安靜，交通回程要確認末班車。'},
-{id:'z13',lv:'grn',n:'Poble-sec（Montjuïc 山腳）',poly:[[41.3742,2.1560],[41.3742,2.1702],[41.3680,2.1702],[41.3680,2.1560]],
- why:'有來源列為低風險社區，酒吧街 Carrer de Blai 在 1/6 晚餐會用到；靠 Paral·lel 大道一側夜間要多留意。',tip:'晚餐後走大馬路搭地鐵 L3 Poble Sec／Paral·lel。'},
-{id:'z14',lv:'grn',n:'Poblenou',poly:[[41.4065,2.1960],[41.4065,2.2110],[41.3950,2.2110],[41.3950,2.1960]],
- why:'被指為較富裕、低風險的社區。',tip:'本次行程大多不會去。'}
-];
-// 地鐵熱點站（來源點名）
-const STATIONS=[
-{n:'Plaça de Catalunya（L1/L3）',lat:41.3870,lng:2.1700},
-{n:'Passeig de Gràcia（L3）',lat:41.3921,lng:2.1649},
-{n:'Drassanes（L3）',lat:41.3795,lng:2.1770}
-];
 const map=L.map('map',{scrollWheelZoom:false}).setView([41.395,2.17],12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 const grp=L.layerGroup().addTo(map);let layers={};

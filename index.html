@@ -94,6 +94,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:13.5px;font-weight:600;color:var(--ink)}
 .btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
 .info{background:var(--pill);border-radius:12px;padding:8px 10px;margin:8px 0;font-size:13px;line-height:1.55}.info div{margin:2px 0}
+.sd{display:inline-block;flex:none;width:11px;height:11px;border-radius:50%;margin-right:6px;border:2px solid var(--card);box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.mini .sd{position:absolute;top:8px;right:8px;margin:0}
+.mini{position:relative}
 .sec{margin:16px 2px 8px;font-weight:800;font-size:15px}
 .notice{font-size:12.5px;color:var(--mut);margin:12px 2px;line-height:1.55}
 /* ---------- 手機 ---------- */
@@ -127,6 +130,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     <a class="lk" href="food.html">🍽️ 完整餐廳／購物／市集／爵士清單 →</a>
     <a class="lk" href="safety.html">🛡️ 治安地圖（2026 下半年）→</a>
     <div class="note" id="hdrNote"></div>
+    <div class="note">圓點 🔴🟠🟢 是該地點所在區域的治安燈號（概略），詳見治安地圖；不代表單一店家。</div>
     <div class="note">營業時間與票價以官網為準；標 ⚠️ 的項目請出發前確認。</div>
   </div>
 </div>
@@ -149,6 +153,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="data.js"></script>
+<script src="zones.js"></script>
 <script>
 document.title=CONFIG.title;document.querySelector('.logo').innerHTML=CONFIG.logoHtml;document.getElementById('hdrNote').textContent=CONFIG.headerNote;
 let LANG='zh-TW',tab=1,dayF=0,anchF='all',eatC='all',eatA='all',curSel=null,openId=null,sheetOpen=false,mapHidden=false;
@@ -194,12 +199,24 @@ function setMapHidden(h){mapHidden=h;$('app').classList.toggle('nomap',h);$('map
 
 /* ----- 元件 ----- */
 const links=o=>`<a class="btn" target="_blank" rel="noopener" href="${maps(o.en||o.n,o.addr)}">Google 地圖 ↗</a><a class="btn" target="_blank" rel="noopener" href="${dir(o.lat,o.lng)}">🧭 大眾運輸路線</a>${o.link?`<a class="btn" target="_blank" rel="noopener" href="${o.link}">🔗 官網</a>`:''}`;
+const SAFE_COL={red:'#d93a3a',ora:'#ee8a1f',grn:'#2e9b57'};
+const SAFE_RANK={red:3,ora:2,grn:1};
+const SAFE_OVR={espanyol:'ora',montserrat:'grn',dali:'grn'};
+function inPoly(lat,lng,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const yi=poly[i][0],xi=poly[i][1],yj=poly[j][0],xj=poly[j][1];if(((yi>lat)!==(yj>lat))&&(lng<(xj-xi)*(lat-yi)/(yj-yi)+xi))c=!c}return c}
+function distM(a,b,c,d){const R=6371000,t=x=>x*Math.PI/180,dl=t(c-a),dg=t(d-b);const q=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dg/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
+function safetyOf(o){
+ if(SAFE_OVR[o.id])return SAFE_OVR[o.id];
+ let best='grn';
+ for(const z of ZONES){const hit=z.poly?inPoly(o.lat,o.lng,z.poly):distM(o.lat,o.lng,z.circle[0],z.circle[1])<=z.circle[2];if(hit&&SAFE_RANK[z.lv]>SAFE_RANK[best])best=z.lv}
+ return best;
+}
+const dotH=o=>`<i class="sd" style="background:${SAFE_COL[safetyOf(o)]}"></i>`;
 const EST={1:'約 €8–15／人（估計）',2:'約 €15–30／人（估計）',3:'約 €30 以上／人（估計）'};
 function priceOf(o){if(o.price)return o.price;if(o.near){if(o.cat==='coffee')return '咖啡約 €2–4／杯（估計）';if(o.cat==='sweet')return '甜點約 €3–7／份（估計）';if(o.cat==='super')return '依購買內容';return EST[o.p]||'請看店家'}return '請查官網'}
 function hoursOf(o){return o.hours||'未查到確切時間，請看 Google 地圖（冬季與節日常縮短，1/1、1/6 可能休息）'}
 const infoH=o=>`<div class="info"><div>⏰ <b>營業時間</b>：${hoursOf(o)}</div><div>💶 <b>價位</b>：${priceOf(o)}</div></div>`;
 function acc(o){
- return `<div class="ac ${openId===o.id?'open':''} ${curSel===o.id?'sel':''}" data-id="${o.id}"><button class="ach" data-acc="${o.id}"><span class="ico" style="background:${o.col}">${o.ic}</span><span class="tt"><b>${o.t}</b><small>${o.en||''}</small><em>${o.sub||''}</em></span><span class="chev">▾</span></button>
+ return `<div class="ac ${openId===o.id?'open':''} ${curSel===o.id?'sel':''}" data-id="${o.id}"><button class="ach" data-acc="${o.id}"><span class="ico" style="background:${o.col}">${o.ic}</span><span class="tt"><b>${dotH(o.obj)}${o.t}</b><small>${o.en||''}</small><em>${o.sub||''}</em></span><span class="chev">▾</span></button>
  <div class="acb">${o.meta?`<div class="meta">${o.meta}</div>`:''}${o.body}${infoH(o.obj)}<div class="acts"><button class="btn pri" data-map="${o.id}">🗺️ 在地圖看</button>${links(o.obj)}</div></div></div>`;
 }
 const tagH=(t,c)=>`<span class="tag ${c||''}">${t}</span>`;
@@ -218,7 +235,7 @@ function eatAcc(e){
   meta:tagH(AREA[e.near])+(e.warn?tagH('⚠️ 請確認營業／位置','warn'):''),
   body:`<p>${e.why}</p>`});
 }
-const mini=(o,price)=>`<button class="mini" data-map="${o.id}"><span class="e">${o.ic}</span><b>${short(o.n)}</b><i>${price||''}</i></button>`;
+const mini=(o,price)=>`<button class="mini" data-map="${o.id}">${dotH(o)}<span class="e">${o.ic}</span><b>${short(o.n)}</b><i>${price||''}</i></button>`;
 function nearHtml(f,shown){
  const area=AREAOF[f.id];let h='';
  const eats=(area&&!shown.has(area))?EATS.filter(e=>e.near===area&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,14):[];
