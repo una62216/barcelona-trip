@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>巴塞隆納 2026 吃喝逛玩地圖</title>
+<style>
+:root{--bg:#fffaf3;--ink:#2b2320;--mut:#7a6c62;--card:#fff;--line:#eadfd2;--red:#c8372d;--gold:#d99a1c;--teal:#0f7c7c;--navy:#1d2d5a}
+@media(prefers-color-scheme:dark){:root{--bg:#1b1715;--ink:#f2e9e0;--mut:#b3a499;--card:#26211e;--line:#3a322d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+header{background:linear-gradient(135deg,#c8372d,#e8892b 55%,#f1c24b);color:#fff;padding:36px 16px 28px;text-align:center}
+header h1{margin:0;font-size:clamp(26px,5vw,42px)}
+header p{margin:8px 0 0;opacity:.95}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0}
+nav .wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+nav a{padding:4px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-size:14px}
+nav input{margin-left:auto;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);min-width:160px}
+section{padding:28px 0 6px}
+.banner{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:16px;color:#fff;margin-bottom:14px}
+.banner .ic{font-size:44px;line-height:1}
+.banner h2{margin:0;font-size:24px}
+.banner p{margin:2px 0 0;font-size:14px;opacity:.95}
+.b-food{background:linear-gradient(120deg,#b52a2a,#e06a3c)}
+.b-cafe{background:linear-gradient(120deg,#6b4226,#b07a48)}
+.b-shop{background:linear-gradient(120deg,#7a2e7a,#d2689c)}
+.b-mkt{background:linear-gradient(120deg,#0f7c7c,#4fb59a)}
+.b-jazz{background:linear-gradient(120deg,#1d2d5a,#4b5fa8)}
+h3{margin:22px 0 8px;font-size:18px;border-left:5px solid var(--gold);padding-left:10px}
+h3 small{color:var(--mut);font-weight:400;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.card .n{font-weight:700}
+.card .a{font-size:13px;color:var(--mut)}
+.card .t{font-size:13px}
+.card .go{margin-top:4px;font-size:13px}
+.tag{display:inline-block;font-size:12px;padding:0 8px;border-radius:99px;margin-right:4px;color:#fff;background:var(--mut)}
+.s3{background:#b8860b}.s2{background:#c8372d}.s1{background:#e07b39}.new{background:#0f7c7c}.warn{background:#8a6d00}.dead{background:#555}
+.dead-card{opacity:.6;text-decoration:line-through}
+.note{background:var(--card);border:1px dashed var(--gold);border-radius:12px;padding:10px 14px;font-size:14px;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--line)}
+.tbl{overflow-x:auto}
+footer{padding:30px 16px;color:var(--mut);font-size:13px;text-align:center}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:48px">🥘 ☕ 🛍️ 🎷</div>
+  <h1>巴塞隆納 2026 吃喝逛玩地圖</h1>
+  <p>Barcelona 2026 · Food, Cafés, Shopping, Markets &amp; Jazz｜行程 2026/12/31 – 2027/01/10｜整理日 2026/11/18</p>
+  <p style="font-size:13px">點每個「📍 地圖」連結開 Google Maps ｜ <span class="tag dead">已歇業</span> 已刪除 ｜ <span class="tag warn">待確認</span> 出發前請再查證</p>
+</header>
+
+<nav><div class="wrap">
+  <a href="#food">🍽️ 餐廳</a><a href="#cafe">☕ 咖啡·景觀</a><a href="#shop">🛍️ 購物</a><a href="#market">🧺 市集</a><a href="#jazz">🎷 爵士</a><a href="#removed">🗑️ 刪除清單</a>
+  <input id="q" type="search" placeholder="🔍 搜尋名稱/街名">
+</div></nav>
+
+<main class="wrap" id="main"></main>
+
+<p style="text-align:center"><a href="index.html">← 回到行程地圖 / Back to itinerary map</a></p>
+<footer>
+資料來源：書籍《巴塞隆納，不只高第》附錄 + 網路查證（Michelin 2026、TMB、Ara、Barcelona Secreta、Tablao Cordobés 官網等）。<br>
+營業時間與星級常變動，訂位前請看官網或 Google Maps。本頁無法逐家保證 100% 即時。
+</footer>
+
+<script>
+const M = (n,a)=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(n+' '+(a||'')+' Barcelona');
+// item: [name, address, note(中文), tags[]]  tags: s3,s2,s1,new,warn,dead
+const sections = [
+{id:'food',cls:'b-food',ic:'🍽️',title:'餐廳 Restaurants',sub:'各分類內「CP 值高→低」排序；米其林與高價位餐廳已刪除。省錢訣竅：平日午間套餐 Menú del día 約 10–20 歐，晚餐 20:00 後才開。',
+ note:'💲 價位標示為依一般認知的估計（省≈€10–20／人、中≈€20–40、偏高≈€40+），非官方價格，未標示者視為中等。⚠️ 書上一般餐廳多數沒查到歇業消息，但書籍年代較舊，請訂位前用地圖連結看最新評論與營業狀態。近期已確認歇業的名店（書上沒有）：Casa Leopoldo、Table（Bruno Verjus，12/22 結束）、Aürt。',
+ groups:[
+ {t:'⭐ 米其林三星 Michelin 3★',items:[
+  ['Lasarte','C/Mallorca 259','2026 仍保持三星 ｜ 巴斯克現代料理',['s3']],
+  ['ABaC','Av. del Tibidabo 1','2026 仍保持三星 ｜ Jordi Cruz',['s3']]]},
+ {t:'⭐⭐ 米其林二星 Michelin 2★',items:[
+  ['Enigma','C/Sepúlveda 38-40','2026 升二星（書上為一星）｜ Albert Adrià',['s2','new']],
+  ['Aleia','Passeig de Gràcia 132 (Casa Fuster)','2026 新升二星（書上未列）',['s2','new']],
+  ['Mont Bar','C/Diputació 220','2026 升二星 ｜ 書上列在「創意 Tapas」',['s2','new']],
+  ['Moments','Passeig de Gràcia 38-40','書上二星；2026 星級待確認',['s2','warn']],
+  ['Disfrutar','C/Villarroel 163','書上二星；部分來源稱已三星，請查 Michelin 官網',['s2','warn']],
+  ['Enoteca','C/Marina 19-21','2026 名單仍見二星',['s2']],
+  ['Dos Cielos','C/Pere IV 286','書上二星；2026 星級待確認 ｜ 同址有景觀餐廳',['s2','warn']]]},
+ {t:'⭐ 米其林一星 Michelin 1★',sub:'星級每年變動；以下為書上名單，未查到歇業，但星級請查 guide.michelin.com',items:[
+  ['Kamikaze','','2026 新獲一星 ｜ Enric Buendía',['s1','new']],
+  ['Scapar','','2026 新獲一星 ｜ 日式 omakase（Koichi Kuwabara）',['s1','new']],
+  ['Alkimia','Ronda de Sant Antoni 41','',['s1']],
+  ['Caelis','Via Laietana 49','',['s1']],
+  ['Dos Palillos','C/Elisabets 9','亞洲融合',['s1']],
+  ['Koy Shunka','C/Copons 7','日式',['s1']],
+  ['Angle','C/Aragó 214','',['s1']],
+  ['Cinc Sentits','C/Aribau 58','',['s1']],
+  ['Roca Moo','C/Rosselló 265','',['s1']],
+  ['Xerta','C/Còrsega 289','',['s1']],
+  ['Gaig','C/Còrsega 200','',['s1']],
+  ['Hofmann','C/Granada del Penedès 14','',['s1']],
+  ['Tickets','Av. del Paral·lel 164','',['s1','warn']],
+  ['Hoja Santa','Av. de Mistral 54','墨西哥',['s1','warn']],
+  ['Hisop','Passatge de Marimon 9','',['s1']],
+  ['Pakta','C/Lleida 5','秘魯-日式',['s1','warn']],
+  ['Nectari','C/València 28','',['s1']],
+  ['Via Veneto','C/Ganduxer 10','',['s1']]]},
+ {t:'🍤 傳統 Tapas',items:[
+  ['Bar Cañete','C/Unió 17'],['Bar Mut','C/Pau Claris 192'],['Cañota','C/Lleida 7'],['Cervecería Catalana','C/Mallorca 236'],
+  ['El Vaso de Oro','C/Balboa 6','海邊 Barceloneta 老店'],['El Xampanyet','C/Montcada 22','氣泡酒與 Tapas'],['La Cova Fumada','C/Baluart 56'],
+  ['Lolita','C/Tamarit 104'],['Paco Meralgo','C/Muntaner 171'],['Quimet & Quimet','C/Poeta Cabanyes 25','站著吃的罐頭 Tapas'],['Rosal 34','C/Roser 34'],
+  ['Segons Mercat','C/Balboa 16'],['Sense Pressa','C/Enric Granados 96'],['Tapas 24','C/Diputació 269'],['Tapeo','C/Assaonadors 25'],['Vivanda','C/Major de Sarrià 134']]},
+ {t:'🍢 創意 Tapas',items:[
+  ['Arola','C/Marina 19-21'],['Artte','C/Muntaner 83C'],['Atapa-it','C/Muntaner 146'],['Bodega 1900','C/Tamarit 91'],['Dos Pebrots','C/Dr. Dou 19'],
+  ['El Bar','C/Calàbria 118'],['Espai Kru','C/Lleida 7'],['La Mundana','C/Vallespir 93'],['Lata-Bern@','C/Torrent de Les Flors 53'],['La Taverna del Clínic','C/Rosselló 155'],
+  ['Monvínic','C/Diputació 249','葡萄酒吧'],['Suculent','Rambla del Raval 43'],['Ten\'s','C/Rec 79'],['Teòric Taverna Gastronòmica','C/Bailèn 117']]},
+ {t:'🥘 精緻傳統菜 Traditional',items:[
+  ['Bonanova','C/Sant Gervasi de Cassoles 103'],['Bravo 24','Plaça de la Rosa dels Vents 1','W Hotel 內'],['Casa Calvet','C/Casp 48','高第設計建築內'],['El Cercle','C/Arcs 5'],
+  ['El Mercader de l\'Eixample','C/Mallorca 239'],['Elx','Moll d\'Espanya 5'],['El Xalet de Montjuïc','Avinguda Miramar 31','山上景觀'],['Embat','C/Mallorca 304'],
+  ['Etapes','C/Enric Granados 10'],['Fonda España','C/Sant Pau 9-11'],['Freixa Tradició','C/Sant Elies 22'],['Gorría','C/Diputació 421'],['La Balsa','C/Infanta Isabel 4'],
+  ['La Palmera','C/Enric Granados 57'],['La Venta','Plaça del Dr. Andreu s/n','Tibidabo 山腳'],['Lázaro','C/Aribau 146'],['L\'Olivé','C/Balmes 47'],['Petit Comité','Passatge de la Concepció 13'],
+  ['Pitarra','C/Avinyó 56'],['Senyor Parellada','C/Argenteria 37'],['Silvestre','C/Santaló 101'],['Tomax','C/Loreto 32'],['Torre d\'Alta Mar','Passeig de Joan de Borbó 88','空中纜車塔頂景觀餐廳'],['Windsor','C/Còrsega 286']]},
+ {t:'🎨 創意料理 Creative',items:[
+  ['Accés','C/Aribau 55'],['Alvart','C/Aribau 141'],['Antigua','C/Maria Cubí 59'],['Àpat','C/Bruc 118'],['Blanc by Carme Ruscalleda','Passeig de Gràcia 38-40'],
+  ['Blau BCN','C/Londres 89'],['Con Gracia','C/Martínez de la Rosa 8'],['Coure','Passatge de Marimon 20'],['El Nido','La Rambla 109'],['Gresca','C/Provença 230'],
+  ['Hetta Cuisine','Passatge de Marimon 5'],['Informal','C/Plata 4'],['La Ferreria','C/Neptú 4'],['La Soperí','C/Rosselló 197'],['L\'Eggs - Paco Pérez','Passeig de Gràcia 116'],
+  ['Lluis de les Moles','C/Moles 25'],['Loidi','C/Mallorca 248-250'],['Manairó','C/Diputació 424'],['Mercer','C/Lledó 7'],['Montiel','C/Flassaders 19'],['Napa','C/Aribau 151'],
+  ['Ófis','C/Espalter 4'],['Oria','Passeig de Gràcia 75','2026 失星、整修歇業，預計春季重開 → 本次行程勿排',['dead']],['Osmosis','C/Aribau 100'],['Pla','C/Bellafila 5'],['Racó d\'en Cesc','C/Diputació 201'],
+  ['Roig Robí','C/Séneca 20'],['Santa Rita Experience','C/Almogàvers 56'],['Sergi de Meià','C/Aribau 106'],['Speakeasy','C/Aribau 162','Dry Martini 後方隱藏餐酒館'],['Spoonik','C/Bertran 28'],
+  ['Uma','C/Mallorca 275'],['Viana Barcelona','C/Vidre 7'],['Tast-ller','C/Viladomat 137'],['Tram-Tram','C/Major de Sarrià 121'],['Zinbar','C/Balmes 159']]},
+ {t:'🦐 海鮮 Seafood',items:[
+  ['Botafumeiro','C/Gran de Gràcia 81'],['Casa Darío','C/Consell de Cent 256'],['Els Pescadors','Plaça de Prim 1','Poblenou 海邊廣場'],['Estimar','C/Sant Antoni dels Sombrers 3'],
+  ['La Lubina','C/Viladomat 257'],['Marea Alta','Av. de les Drassanes 6'],['Rias de Galicia','C/Lleida 7'],['Suquet de l\'Almirall','Passeig de Joan de Borbó 65','Barceloneta']]},
+ {t:'🥩 肉類 Meat',items:[
+  ['Asador de Aranda','Av. del Tibidabo 31'],['Bardeni-Caldeni','C/València 454'],['Lomo Alto','C/Aragó 283-285'],['Rokelin Taberna Gourmet','C/Comte d\'Urgell 7']]},
+ {t:'🥗 素食 Vegetarian',items:[
+  ['4Amb5 Mujades','Rambla del Raval 45'],['Xavier Pellicer','C/Provença 310','以素食為主，也有少量葷菜'],['Green Spot','C/Reina Cristina 12'],['Rasoterra','C/Palau 5'],['The Greenhouse','C/Bergara 8']]},
+ {t:'🍣 東方·日式 / 南美 / 秘魯-日式',items:[
+  ['99 Sushi Bar','C/Tenor Viñas 4','東方飲食'],['Bao Bar','C/Arimon 48'],['Kak Koy','C/Ripoll 16'],['Majide','C/Tallers 48'],['Minamo Barcelona','C/Bruc 65'],
+  ['Caña de Azúcar','C/Muntaner 69','南美'],['FOgO','C/Còrsega 231','南美'],['Niño Viejo','Av. de Mistral 54','南美'],['Oaxaca','Pla de Palau 19','南美／墨西哥'],
+  ['Ají','C/Marina 19','秘魯-日式'],['Mano Rota','C/Creu dels Molers 4','秘魯-日式']]}
+ ]},
+{id:'cafe',cls:'b-cafe',ic:'☕',title:'咖啡廳 · 景觀餐廳 Cafés &amp; Views',sub:'書上以「觀景餐廳、咖啡廳」分類；另含跨年可看夜景的地點。冬季日落約 17:30。',
+ groups:[
+ {t:'🌆 遠眺城市',items:[
+  ['El Corte Inglés 頂樓餐廳','Plaça de Catalunya 14','加泰隆尼亞廣場旁，百貨公司頂樓'],
+  ['Dos Cielos','C/Pere IV 272','書上寫 272，餐廳本體 286（二星）'],
+  ['Restaurante Evo','Av. de la Gran Via de les Corts Catalanes 144','',['warn']],
+  ['Visual','Avda. Roma 2','',['warn']],
+  ['Oleum (MNAC)','Palau Nacional, Parc de Montjuïc','加泰隆尼亞藝術博物館 2 樓',['warn']],
+  ['El Xalet de Montjuïc','Avinguda de Miramar 31','Montjuïc 山上'],
+  ['Mirablau','C/Manuel Arnús 2','Tibidabo 夜景酒吧咖啡廳']]},
+ {t:'🌊 遠眺海景',items:[
+  ['Marina Moncho\'s','C/Marina 19-21','奧運港'],
+  ['El Xiringuito de Escribà','Avda. del Litoral 42','海灘 Paella，由 Escribà 甜點世家經營',['warn']],
+  ['1881 per Sagardi','Palau de Mar (Museu d\'Història de Catalunya)','歷史博物館（海洋宮）頂樓',['warn']],
+  ['Torre d\'Alta Mar','Passeig de Joan de Borbó 88','港口空中纜車塔頂'],
+  ['Barceloneta','C/Escar 22','海鮮飯']]},
+ {t:'🥐 甜點 / 咖啡補給（書中）',items:[
+  ['Escribà 甜點','','書中提到創意甜點與巧克力，Rambla 與多處有分店',['warn']],
+  ['Enric Rovira 巧克力','','書中推薦：磁磚圖案巧克力',['warn']],
+  ['Marula Café','C/Escudellers 49','書中列於夜生活，白天為咖啡館/晚上有現場表演',['warn']]]}
+ ]},
+{id:'shop',cls:'b-shop',ic:'🛍️',title:'購物 Shopping',sub:'冬季特賣 1/7 起至 2 月底；週日及 1/1、1/6 多數商店休息。',
+ groups:[
+ {t:'🏬 購物中心 Malls',items:[
+  ['Maremagnum','Moll d\'Espanya 5','港口；頂樓為景觀點。營業約至 21:00–22:00，週日也常營業'],
+  ['Arenas de Barcelona','Gran Via de les Corts Catalanes 373-385','舊鬥牛場改建，頂樓環形景觀台'],
+  ['Diagonal Mar','Av. Diagonal 3'],['L\'illa Diagonal','Av. Diagonal 557'],['La Maquinista','C/Potosí 2'],
+  ['Centre Comercial Glòries','Av. Diagonal 208'],['Heron City Barcelona','Pg. Taulat 266'],['Gran Via 2','Av. de la Granvia 75']]},
+ {t:'🛒 主要商圈 & 百貨',items:[
+  ['El Corte Inglés（加泰隆尼亞廣場）','Plaça de Catalunya 14','全西班牙算「同一家」，退稅金額可合併；書中說明：El Corte Inglés 原意是「英式剪裁」，不是「英國宮」'],
+  ['Passeig de Gràcia 精品街','Passeig de Gràcia','Loewe、Tous、Custo 等'],
+  ['Portal de l\'Àngel（步行街）','Portal de l\'Àngel','Zara 等大眾品牌'],
+  ['Avinguda Diagonal','Av. Diagonal','']]},
+ {t:'👟 穿戴品牌',items:[
+  ['Camper 鞋','','書中推薦；市區多家門市（點地圖找最近）'],['Loewe 皮件','','書中推薦；Passeig de Gràcia 一帶'],['Tous 首飾','','書中推薦；Passeig de Gràcia 一帶'],['Custo Barcelona','','書中推薦；老城區有門市'],['Adolfo Domínguez','','書中推薦服裝設計師'],
+  ['Zara','','與 El Corte Inglés 同屬「同一家店」可合併退稅'],['Lladró 瓷偶','','書中推薦伴手禮']]},
+ {t:'🎁 伴手禮清單（書中）',items:[
+  ['🫒 橄欖油 / 橄欖','','Aceite de Oliva、Aceitunas'],['🍷 Vino Tinto / 🥂 Cava','','紅酒與氣泡酒'],['🍫 巧克力 / Turrón / Mazapán','','Chocolate a la piedra、杏仁糖'],
+  ['🥘 Paella 平底鍋與調味','','Paella pan、番紅花 Azafrán、紅椒粉 Pimentón'],['🧴 Perfumería Gal','','護唇膏、橄欖油護膚品'],['🏺 手工藝','','橄欖木製品、陶瓷、刺繡與玻璃藝品']].map(x=>{x.push(['mapless']);return x})}
+ ],
+ extra:`<h3>🧾 退稅 Tax Refund（2026）</h3>
+ <div class="note">① 非歐盟居民才可退。② 多數 2026 來源：西班牙<b>已無最低消費門檻</b>（舊書寫 90.15 歐已過時，少數網站仍寫 90.16，請以店家為準）。③ 店內請開 Tax Free 退稅單、填護照資料。④ <b>離開歐盟前最後一個機場</b>先蓋章（物品別先托運，備好機票、護照）。⑤ 領現金或退信用卡；實拿約 12.75–15.3%。<br>
+ ➜ <a href="https://www.globalblue.com/" target="_blank" rel="noopener">Global Blue</a> ｜ <a href="https://sede.agenciatributaria.gob.es/" target="_blank" rel="noopener">Agencia Tributaria</a></div>`},
+{id:'market',cls:'b-mkt',ic:'🧺',title:'市集 Markets',sub:'你的行程 12/31–1/10：聖誕市集大多已結束；1/1、1/6 多數市集休息。時間為書上資料，部分請再確認。',
+ groups:[
+ {t:'🏺 古董 / 舊貨',items:[
+  ['Mercat dels Encants (Fira de Bellcaire)','C/Castillejos 158','書：週一、三、五、六 9:00–20:00；起源 13 世紀',['warn']],
+  ['Mercat Gòtic Antiguitats','Plaça Nova 1','每週四 10:00–20:00（大教堂前）'],
+  ['Fira Brocanters Moll de les Drassanes','Moll Drassanes 1','週六、日 11:00–21:00（海邊）',['warn']],
+  ['Mercat Dominical de Sant Antoni','C/Comte d\'Urgell 11','每週日 8:30–14:30｜二手書、黑膠、漫畫'],
+  ['Mercat de Numismàtica i Filatèlia','Plaça Reial 1','每週日 9:00–14:30｜古郵票錢幣']]},
+ {t:'🎨 手工藝 / 藝術',items:[
+  ['Feria de Artesanía de Portal de l\'Àngel','Av. Portal de l\'Àngel','不定期',['warn']],
+  ['Fira Nova Artesania de Rambles','La Rambla 1','10/31–6/30 每週六 14:00–22:00（書上資料）',['warn']],
+  ['Fira d\'Artesans Moll de Dipòsit','Pl. Pau Vila 1','7–8 月每天；其他月份週六、日 11:00–20:30',['warn']],
+  ['Mostra d\'Art Pintors del Pi','Pl. Sant Josep Oriol 1','週六 11:00–20:00，週日 11:00–14:00'],
+  ['Mostra d\'Art de Park Güell','C/Olot 7','週六、日 10:00–14:00'],
+  ['Mostra de Pintors Afeccionats (Sagrada Família)','Pl. Sagrada Família 1','週六、日 10:00–15:00']]},
+ {t:'🧀 農牧產品市集',items:[
+  ['Fira de Productes Tradicionals Catalans','Plaça del Pi 1','每月最後週六、日 10:00–22:00',['warn']],
+  ['Fira del Col·lectiu d\'Artesans d\'Alimentació','Plaça del Pi 1','每月第 1、3 個週五～日 11:00–21:00',['warn']]]},
+ {t:'🎄 節慶市集（與你的日期）',items:[
+  ['Fira de Santa Llúcia','Pl. Nova 1','約 11 月底–12/23 → 你抵達時<b>已結束</b>',['dead']],
+  ['Fira de Nadal de la Sagrada Família','Pl. Sagrada Família 1','約 11 月底–聖誕節前 → <b>已結束</b>',['dead']],
+  ['Fira de Reis (Gran Via)','Gran Via, entre Muntaner 與 Rocafort','多數來源：營業至 1/6，免費入場 → 建議 1/3 與 Sant Antoni 市集一起逛（地鐵 L1 Urgell / Rocafort）',['warn']],
+  ['Nadal al Port（Port Vell 港口聖誕市集）','Port Vell','單一來源寫 11/27–1/6 → 1/8 港口日順路',['warn']]]}
+ ]},
+{id:'jazz',cls:'b-jazz',ic:'🎷',title:'爵士樂 Jazz',sub:'書上列出的爵士場地；跨年夜／週末建議事先訂票。',
+ groups:[
+ {t:'🎶 爵士俱樂部',items:[
+  ['Bel-Luna Jazz Club & Restaurant','Rambla de Catalunya 5','書上資料；營業狀態請再確認',['warn']],
+  ['Harlem Jazz Club','C/Comtessa de Sobradiel 8','2025 年來源仍列營業 ✔ ｜ 哥德區小巷，夜間注意安全'],
+  ['Jamboree Dance Club','Plaça Reial 17','2025 年來源仍列營業 ✔ ｜ 地下爵士＋舞池；Tarantos 同廣場'],
+  ['Jazz Room - La Cova del Drac','C/Vallmajor 33','書上資料；營業狀態請再確認',['warn']]]},
+ {t:'🎻 古典音樂（順帶，書上同頁）',items:[
+  ['Gran Teatre del Liceu','La Rambla 51','營業 ✔'],
+  ['Palau de la Música Catalana','C/Palau de la Música 4-6','營業 ✔｜世界遺產'],
+  ['L\'Auditori','C/Lepant 150','營業 ✔']]},
+ {t:'💃 佛朗明哥（順帶）',items:[
+  ['Tablao Flamenco Cordobés','La Rambla 35','官方稱全年 365 天營業，含 12/31 ｜ 營業 ✔'],
+  ['Sala Tarantos','Plaça Reial 17','',['warn']],
+  ['Palacio del Flamenco','C/Balmes 139','查不到明確資料',['warn']],
+  ['El Patio Andaluz','C/Aribau 242','查不到明確資料',['warn']],
+  ['El Tablao de Carmen Amaya','Poble Espanyol (Av. Francesc Ferrer i Guàrdia 13)','查不到明確資料',['warn']]]}
+ ],
+ extra:`<div class="note">🎷 跨年夜（12/31）演出常為特別場，請直接上官網訂位。夜店/小酒館歇業率高；Poblenou 的 BB+、D9、Open Bar 已永久歇業。</div>`}
+];
+
+const removed=[
+ ['Oria','2026 失星，整修歇業'],['Kitchen & Bar Theater','2026 失星並結束營業'],
+ ['Casa Leopoldo','2026/6 結束（書上無，提醒避免誤入）'],['Table（Bruno Verjus）','2026/12/22 最後營業'],['Aürt','2026 已結束'],
+ ['Fira de Santa Llúcia / Fira de Nadal Sagrada Família','聖誕市集 12/23 前結束，與你日期不重疊'],['書中 Tramvia Blau','2018 停駛（交通篇已刪）']];
+
+// ===== CP 值排序：價位 1=最省(約€10-20/人) 2=中等(€20-40) 3=偏高(€40+) — 依一般認知估計，非官方價格 =====
+const P={'Quimet & Quimet':1,'El Xampanyet':1,'La Cova Fumada':1,'Tapas 24':1,'Rasoterra':1,'4Amb5 Mujades':1,'Bar Cañete':2,'El Vaso de Oro':2,'Cañota':2,'Bar Mut':3,
+ 'Enoteca':3,'Mirablau':2,'El Corte Inglés 頂樓餐廳':2,'El Xalet de Montjuïc':3,'Visual':3,'Oleum (MNAC)':3,'1881 per Sagardi':3,'Marina Moncho\'s':3,'Barceloneta':3,
+ 'Zara':1,'Portal de l\'Àngel（步行街）':1,'El Corte Inglés（加泰隆尼亞廣場）':1,'Centre Comercial Glòries':1,'La Maquinista':1,'Heron City Barcelona':1,'Gran Via 2':1,'Maremagnum':2,'Arenas de Barcelona':2,'Diagonal Mar':2,'L\'illa Diagonal':2,'Avinguda Diagonal':3,
+ 'Mercat Dominical de Sant Antoni':1,'Mercat dels Encants (Fira de Bellcaire)':1,'Mercat Gòtic Antiguitats':2,'Jamboree Dance Club':1,'Harlem Jazz Club':1,'Bel-Luna Jazz Club & Restaurant':2,'Jazz Room - La Cova del Drac':2,
+ 'Tablao Flamenco Cordobés':3,'Gran Teatre del Liceu':3,'Palau de la Música Catalana':3,'L\'Auditori':2,'Bodega 1900':3,'Gresca':3,'Speakeasy':3};
+const PL={1:'💲 省',2:'💲💲 中',3:'💲💲💲 偏高'};
+// 太高端：略過整個米其林區塊與下列店家
+const DROP=new Set(['Blanc by Carme Ruscalleda','L\'Eggs - Paco Pérez','Osmosis','Roig Robí','Botafumeiro','Casa Darío','Suquet de l\'Almirall','Torre d\'Alta Mar','Windsor','Bravo 24','Xavier Pellicer','Con Gracia','Asador de Aranda','Oria','Dos Cielos','Restaurante Evo',
+ 'Passeig de Gràcia 精品街','Loewe 皮件','Tous 首飾','Custo Barcelona','Adolfo Domínguez','Lladró 瓷偶','Aleia','Monvínic','Lasarte','ABaC','Enigma','Mont Bar','Moments','Disfrutar']);
+function prep(g){ if(/米其林/.test(g.t))return null;
+ const items=g.items.filter(i=>!DROP.has(i[0])).map((i,k)=>({i,k,p:P[i[0]]||2}));
+ items.sort((a,b)=>a.p-b.p||a.k-b.k);
+ return items.length?{...g,items:items.map(x=>x.i)}:null;}
+function link(n,a){return `<a class="go" target="_blank" rel="noopener" href="${M(n,a)}">📍 地圖</a>`}
+function tagHtml(tags){return (tags||[]).filter(t=>t!=='mapless').map(t=>({s3:['三星','s3'],s2:['二星','s2'],s1:['一星','s1'],new:['2026 新','new'],warn:['待確認','warn'],dead:['已歇業/已結束','dead']}[t])).filter(Boolean).map(([l,c])=>`<span class="tag ${c}">${l}</span>`).join('')}
+function card(it){
+ const [n,a,note,tags]=it; const dead=(tags||[]).includes('dead');
+ const pl=P[n]?`<span class="tag" style="background:#2e7d32">${PL[P[n]]}</span>`:'';
+ return `<div class="card ${dead?'dead-card':''}" data-s="${(n+' '+(a||'')+' '+(note||'')).toLowerCase()}"><div class="n">${n}</div><div>${pl}${tagHtml(tags)}</div>${a?`<div class="a">${a}</div>`:''}${note?`<div class="t">${note}</div>`:''}${(tags||[]).includes('mapless')?'':link(n,a)}</div>`;
+}
+let html='';
+for(const s of sections){
+ html+=`<section id="${s.id}"><div class="banner ${s.cls}"><div class="ic">${s.ic}</div><div><h2>${s.title}</h2><p>${s.sub}</p></div></div>`;
+ if(s.note)html+=`<div class="note">${s.note}</div>`;
+ for(const g0 of s.groups){const g=prep(g0); if(!g)continue; html+=`<div class="grp"><h3>${g.t} ${g.sub?`<small>${g.sub}</small>`:''}</h3><div class="grid">${g.items.map(card).join('')}</div></div>`}
+ if(s.extra)html+=s.extra;
+ html+='</section>';
+}
+html+=`<section id="removed"><div class="banner" style="background:#555"><div class="ic">🗑️</div><div><h2>已刪除 / 不排入行程</h2><p>與你的日期或現況不符</p></div></div><div class="tbl"><table><tr><th>項目</th><th>原因</th></tr>${removed.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div></section>`;
+document.getElementById('main').innerHTML=html;
+document.getElementById('q').addEventListener('input',e=>{
+ const v=e.target.value.trim().toLowerCase();
+ document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide',v&&!c.dataset.s.includes(v)));
+ document.querySelectorAll('.grp').forEach(g=>g.classList.toggle('hide',v&&!g.querySelector('.card:not(.hide)')));
+});
+</script>
+</body>
+</html>
