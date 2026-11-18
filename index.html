@@ -2,304 +2,302 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>巴塞隆納行程地圖</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>旅遊行程地圖</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{--bg:#f4f1ec;--card:#fff;--ink:#1c1b1a;--mut:#74706a;--line:#e7e2da;--brand:#ff5a36;--pill:#efeae2;--shadow:0 6px 20px rgba(40,30,20,.08)}
-@media(prefers-color-scheme:dark){:root{--bg:#161412;--card:#221f1c;--ink:#f3eee8;--mut:#a9a199;--line:#37322d;--pill:#2f2a26;--shadow:0 6px 20px rgba(0,0,0,.4)}}
-*{box-sizing:border-box}
+:root{--bg:#f4f1ec;--card:#fff;--ink:#1c1b1a;--mut:#74706a;--line:#e7e2da;--brand:#ff5a36;--pill:#efeae2;--shadow:0 4px 16px rgba(40,30,20,.08);--nav:58px}
+@media(prefers-color-scheme:dark){:root{--bg:#161412;--card:#221f1c;--ink:#f3eee8;--mut:#a9a199;--line:#37322d;--pill:#2f2a26;--shadow:0 4px 16px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;display:flex;flex-direction:column}
-a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
-.top{display:flex;align-items:center;gap:14px;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
-.logo{font-weight:800;font-size:18px}
-.logo span{color:var(--brand)}
-.tabs{display:flex;gap:6px;background:var(--pill);padding:4px;border-radius:99px}
-.tabs button{border:0;background:transparent;color:var(--ink);padding:7px 16px;border-radius:99px;font:inherit;font-weight:600;cursor:pointer}
-.tabs button.on{background:var(--ink);color:var(--bg)}
-.hotel{margin-left:auto;font-size:13px;color:var(--mut)}
-.app{flex:1;display:grid;grid-template-columns:minmax(380px,480px) 1fr;min-height:0}
-.side{overflow:auto;padding:16px 18px 40px}
-#map{height:100%;min-height:300px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:5px 12px;border-radius:99px;font:inherit;font-size:13px;cursor:pointer}
-.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
-.plan{background:var(--card);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:14px;border-left:6px solid var(--brand)}
-.plan h2{margin:0 0 4px;font-size:18px}
-.plan p{margin:4px 0;color:var(--mut);font-size:14px}
-.card{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:10px;margin-bottom:12px;cursor:pointer;border:2px solid transparent;transition:.15s}
-.card:hover,.card.sel{border-color:var(--brand)}
-.thumb{border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;min-height:96px;position:relative}
-.thumb b{position:absolute;top:6px;left:6px;font-size:11px;background:rgba(0,0,0,.35);padding:1px 7px;border-radius:99px}
-.card h3{margin:0;font-size:16px}
-.card h3 small{color:var(--mut);font-weight:400;font-size:12px;margin-left:4px}
-.meta{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
-.tag{font-size:12px;background:var(--pill);padding:1px 9px;border-radius:99px}
-.tag.warn{background:#fff2c9;color:#7a5a00}
-.tag.ok{background:#d9f2e0;color:#14642d}
-.card p{margin:2px 0;font-size:13.5px}
-.card .row{font-size:12.5px;color:var(--mut)}
-.links{margin-top:4px;font-size:13px;display:flex;gap:12px;flex-wrap:wrap}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+a{color:var(--brand);text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+/* ---------- 頂欄 ---------- */
+.top{position:relative;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:18px;white-space:nowrap}.logo span{color:var(--brand)}
+.dtabs{display:flex;gap:4px;background:var(--pill);padding:3px;border-radius:99px;margin-left:8px}
+.dtabs button,.nav button{border:0;background:transparent}
+.dtabs button{padding:6px 14px;border-radius:99px;font-weight:600;font-size:14px}
+.dtabs button.on{background:var(--ink);color:var(--bg)}
+.sp{flex:1}
+.ib{border:1px solid var(--line);background:var(--card);border-radius:12px;min-height:40px;padding:0 12px;font-size:14px;font-weight:600}
+.menu{position:absolute;right:10px;top:100%;margin-top:6px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:12px;width:min(320px,calc(100vw - 20px));display:none}
+.menu.open{display:block}
+.menu h4{margin:6px 0 6px;font-size:13px;color:var(--mut)}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;min-height:40px;border:1px solid var(--line);background:var(--card);border-radius:12px;font-size:14px}
+.seg button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.menu a.lk{display:block;padding:10px 4px;border-top:1px solid var(--line);margin-top:8px;font-weight:600}
+.menu .note{font-size:12.5px;color:var(--mut);margin-top:6px}
+/* ---------- 版面 ---------- */
+.app{flex:1;min-height:0;display:grid;grid-template-columns:minmax(380px,520px) 1fr}
+.app.nomap{grid-template-columns:1fr}
+.app.nomap .mapwrap{display:none}
+.side{overflow-y:auto;padding:0 14px 90px;-webkit-overflow-scrolling:touch}
+.app.nomap .side{max-width:880px;width:100%;margin:0 auto}
+.mapwrap{display:flex;flex-direction:column;min-height:0;background:var(--card);border-left:1px solid var(--line)}
+.mhead{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);font-size:13px}
+.mhead .chip{min-height:34px}
+.mhead .x{margin-left:auto;display:none}
+#gm{width:100%;flex:1;border:0;min-height:200px;background:var(--pill)}
+#map{flex:1;min-height:200px;display:none}
 .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
 .pin span{transform:rotate(45deg);color:#fff;font-weight:700;font-size:13px}
-.notice{font-size:12.5px;color:var(--mut);margin:14px 0}
-.sec{margin:18px 0 6px;font-weight:800;font-size:15px}
-#gm{width:100%;flex:1;border:0;min-height:300px}
-.mapwrap{display:flex;flex-direction:column;height:100%;min-height:0}
-.mbar{display:flex;gap:6px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);align-items:center;flex-wrap:wrap;font-size:13px}
-.mbar .chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.mbar .sp{margin-left:auto;color:var(--mut)}
-.plan .rt{display:inline-block;margin-top:6px;font-size:13px;font-weight:700}
-@media(max-width:820px){.app{grid-template-columns:1fr;grid-template-rows:42vh 1fr}#map{order:-1}.hotel{display:none}}
+/* ---------- chips ---------- */
+.chips{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:10px 0 8px;background:var(--bg);scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);padding:6px 13px;border-radius:99px;font-size:13.5px;min-height:38px;white-space:nowrap}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.mhead .chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.hint{font-size:12.5px;color:var(--mut);margin:4px 2px 10px}
+/* ---------- 日程 ---------- */
+.day{background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin:0 0 12px;overflow:hidden}
+.dh{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;text-align:left;padding:12px 14px;min-height:60px}
+.dnum{flex:none;width:44px;height:44px;border-radius:14px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1.1}
+.dnum small{font-size:10px;font-weight:600;opacity:.9}
+.dt{flex:1;min-width:0}.dt b{display:block;font-size:15.5px}.dt em{display:block;font-style:normal;font-size:12.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{flex:none;transition:.2s;color:var(--mut)}
+.open>.dh .chev,.open>.ach .chev{transform:rotate(180deg)}
+.db{display:none;padding:0 14px 14px}
+.day.open .db{display:block}
+.dtxt{font-size:14px;color:var(--mut);margin:0 0 8px}
+.tl{position:relative;margin:6px 0 4px 8px;padding-left:22px;border-left:3px solid var(--line)}
+.tl>.stop{position:relative;margin:0 0 10px}
+.tl>.stop::before{content:"";position:absolute;left:-33px;top:22px;width:13px;height:13px;border-radius:50%;background:var(--c,var(--brand));border:3px solid var(--card)}
+.near{margin:6px 0 4px}
+.nh{font-size:12.5px;font-weight:700;color:var(--mut);margin:8px 0 5px}
+.scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.mini{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:132px;padding:8px 10px;border-radius:14px;border:1px solid var(--line);background:var(--bg);text-align:left}
+.mini .e{font-size:22px;line-height:1}
+.mini b{font-size:13px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mini i{font-style:normal;font-size:11.5px;color:var(--mut)}
+.rt{display:inline-flex;align-items:center;gap:6px;margin:4px 0 6px;font-weight:700;font-size:13.5px}
+/* ---------- 可展開卡片 ---------- */
+.ac{background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin:0 0 10px;border:2px solid transparent;overflow:hidden}
+.ac.sel{border-color:var(--brand)}
+.ach{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;text-align:left;padding:10px 12px;min-height:60px}
+.ico{flex:none;width:44px;height:44px;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+.tt{flex:1;min-width:0}.tt b{display:block;font-size:15px;line-height:1.3}
+.tt small{display:block;color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt em{display:block;font-style:normal;font-size:12.5px;color:var(--mut)}
+.acb{display:none;padding:0 12px 12px}
+.ac.open .acb{display:block}
+.acb p{margin:6px 0;font-size:14px}
+.row{font-size:13px;color:var(--mut);margin:3px 0}
+.meta{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.tag{font-size:12px;background:var(--pill);padding:2px 9px;border-radius:99px}
+.tag.warn{background:#fff2c9;color:#7a5a00}.tag.ok{background:#d9f2e0;color:#14642d}
+@media(prefers-color-scheme:dark){.tag.warn{background:#4a3d12;color:#ffe08a}.tag.ok{background:#173d24;color:#9ee6b3}}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:13.5px;font-weight:600;color:var(--ink)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.sec{margin:16px 2px 8px;font-weight:800;font-size:15px}
+.notice{font-size:12.5px;color:var(--mut);margin:12px 2px;line-height:1.55}
+/* ---------- 手機 ---------- */
+.nav{display:none}
+@media(max-width:820px){
+ .dtabs,#mapToggle{display:none}
+ .app{grid-template-columns:1fr}
+ .side{padding-bottom:calc(var(--nav) + 90px)}
+ .nav{position:fixed;left:0;right:0;bottom:0;z-index:30;height:calc(var(--nav) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:var(--card);border-top:1px solid var(--line)}
+ .nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:11.5px;color:var(--mut)}
+ .nav button span{font-size:20px;line-height:1}
+ .nav button.on{color:var(--brand);font-weight:700}
+ .mapwrap{position:fixed;left:0;right:0;bottom:calc(var(--nav) + env(safe-area-inset-bottom));height:62vh;z-index:25;border-radius:20px 20px 0 0;border:1px solid var(--line);box-shadow:0 -8px 30px rgba(0,0,0,.25);transform:translateY(120%);transition:transform .25s}
+ .mapwrap.open{transform:translateY(0)}
+ .app.nomap .mapwrap{display:flex}
+ .mhead .x{display:inline-flex}
+ .mhead #mHint{display:none}
+}
 </style>
 </head>
 <body>
 <div class="top">
-  <div class="logo">Barna<span>Trip</span> 🗺️</div>
-  <div class="tabs"><button id="t1" class="on">📅 每日行程地圖</button><button id="t2">🔗 書本推薦 × 順路搭配</button><button id="t3">🍴 美食補給</button></div>
-  <div class="tabs" id="lg"><button data-l="zh-TW" class="on">中文地圖</button><button data-l="en">English Map</button></div>
-  <a class="hotel" style="margin-left:12px" href="food.html">🍽️ 完整餐廳/購物/市集/爵士清單 →</a>
-  <div class="hotel">📍 出發點：Plaça de Catalunya（市中心）｜2027/1/1–1/9</div>
+  <div class="logo"></div>
+  <div class="dtabs" id="dtabs"><button data-t="1" class="on">📅 每日行程</button><button data-t="2">🔗 順路搭配</button><button data-t="3">🍴 美食補給</button></div>
+  <div class="sp"></div>
+  <button class="ib" id="mapToggle">🗺️ 隱藏地圖</button>
+  <button class="ib" id="menuBtn" aria-expanded="false">☰ 選單</button>
+  <div class="menu" id="menu">
+    <h4>地圖語言 / Map language</h4>
+    <div class="seg" id="lg"><button data-l="zh-TW" class="on">中文</button><button data-l="en">English</button></div>
+    <a class="lk" href="food.html">🍽️ 完整餐廳／購物／市集／爵士清單 →</a>
+    <div class="note" id="hdrNote"></div>
+    <div class="note">營業時間與票價以官網為準；標 ⚠️ 的項目請出發前確認。</div>
+  </div>
 </div>
-<div class="app">
+
+<div class="app" id="app">
   <div class="side" id="side"></div>
-  <div class="mapwrap"><div class="mbar"><button class="chip on" id="mG">🗺️ Google 地圖 / Google Maps</button><button class="chip" id="mO">📍 全部標記總覽 / Overview</button><span class="sp" id="mHint">點左側卡片 → 地圖定位 · Click a card to locate</span></div>
-  <iframe id="gm" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe><div id="map" style="display:none;flex:1;min-height:300px"></div></div>
+  <div class="mapwrap" id="mapwrap">
+    <div class="mhead"><button class="chip on" id="mG">Google 地圖</button><button class="chip" id="mO">總覽</button><span id="mHint" style="color:var(--mut)">點「在地圖看」定位</span><button class="chip x" id="mClose">✕ 收合</button></div>
+    <iframe id="gm" title="Google Maps" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    <div id="map"></div>
+  </div>
 </div>
+
+<nav class="nav" id="nav">
+  <button data-t="1" class="on"><span>📅</span>行程</button>
+  <button data-t="2"><span>🔗</span>順路</button>
+  <button data-t="3"><span>🍴</span>美食</button>
+  <button id="navMap"><span>🗺️</span>地圖</button>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data.js"></script>
 <script>
-let LANG='zh-TW';
-const maps=(n,a)=>'https://www.google.com/maps/search/?api=1&hl='+LANG+'&query='+encodeURIComponent(n+' '+(a||'')+' Barcelona');
-const dir=(lat,lng)=>`https://www.google.com/maps/dir/?api=1&hl=${LANG}&origin=${encodeURIComponent('Plaça de Catalunya Barcelona')}&destination=${lat},${lng}&travelmode=transit`;
-const HOTEL={n:'Plaça de Catalunya',lat:41.3870,lng:2.1700};
-const DAYCOL=['#e63946','#f4a261','#2a9d8f','#264653','#8e44ad','#d35400','#1d8348','#2980b9','#c2185b'];
-const DATES=['1/1 週五','1/2 週六','1/3 週日','1/4 週一','1/5 週二','1/6 週三','1/7 週四','1/8 週五','1/9 週六'];
-
-// ===== 確定景點（fixed）=====
-const FIX=[
-{id:'batllo',day:1,ord:1,ic:'🐉',n:'巴特由之家',en:'Casa Batlló',lat:41.3916,lng:2.1649,addr:'Passeig de Gràcia 43',
- tags:['預約制','高第'],warn:['國定假日 1/1 開放時間請查官網'],time:'上午 10:00',
- d:'龍背屋頂與海洋色彩外牆，高第代表作之一。',tr:'從市中心步行約 20 分，或 Universitat 搭 L2 一站到 Passeig de Gràcia 再走 2 分。'},
-{id:'milà',day:1,ord:2,ic:'🪨',n:'米拉之家（採石場）',en:'Casa Milà / La Pedrera',lat:41.3953,lng:2.1618,addr:'Passeig de Gràcia 92',
- tags:['預約制','高第'],warn:['開放時間請查官網'],time:'下午 14:30',
- d:'波浪形石造外觀與屋頂煙囪群。與巴特由之家步行 8 分鐘，同日安排最順。',tr:'沿 Passeig de Gràcia 步行；回程 Diagonal 站 L3/L5。'},
-{id:'guell',day:2,ord:1,ic:'🦎',n:'桂爾公園',en:'Park Güell',lat:41.4145,lng:2.1527,addr:'Carrer d\'Olot 5',
- tags:['成人 €18','需預約時段','高第'],warn:['冬季日落早，建議早場'],time:'上午 09:30',
- d:'馬賽克彩色蜥蜴與長椅，山丘上看全城。',tr:'Plaça Catalunya 搭公車 24 到公園入口（約 25 分）；或 L3 Vallcarca / Lesseps 步行上坡。'},
-{id:'sagrada',day:2,ord:2,ic:'⛪',n:'聖家堂',en:'Sagrada Família',lat:41.4036,lng:2.1744,addr:'Carrer de Mallorca 401',
- tags:['約 €26 起','需預約時段','高第'],warn:['冬季約 9:00–18:00，週日 10:30 起'],time:'下午 15:30（預約日落前入場）',
- d:'2026 為高第逝世百年。建議挑午後入場看彩繪玻璃。',tr:'Universitat 搭 L2 直達 Sagrada Família（約 12 分）。從桂爾公園搭公車/地鐵約 30 分。'},
-{id:'fireareis',day:3,ord:1,ic:'🎄',n:'三王節聖誕市集 Fira de Reis（Gran Via）',en:'Fira de Reis Gran Via',lat:41.382,lng:2.159,addr:'Gran Via de les Corts Catalanes, entre C/ Muntaner 與 C/ Rocafort',
- tags:['聖誕市集','免費入場','約至 1/6'],warn:['2026–27 日期各來源不一，多數寫到 1/6；去年營業至 21:00（週六及假日前夕至 22:00）','1/6 假日可能提早收攤，建議 1/3 或 1/5 前'],time:'1/3 上午接續 Sant Antoni 市集，或傍晚',
- d:'170 多個攤位的傳統三王節市集，賣聖誕飾品、手工藝、糖果與小吃，是你行程期間最方便逛的聖誕市集。',tr:'Universitat 搭 L1 一站到 Rocafort 或 Urgell（距離市中心約 10 分步行）；旁邊就是 Mercat de Sant Antoni，同日一起逛最順。'},
-{id:'nadalport',day:8,ord:1,ic:'🎅',n:'港口聖誕市集 Nadal al Port',en:'Nadal al Port · Port Vell',lat:41.3758,lng:2.1815,addr:'Port Vell',
- tags:['聖誕市集','港口海景'],warn:['僅單一來源寫「11/27–1/6」，請出發前確認','位置為概略，請看官網'],time:'1/8 下午接 Maremagnum / 港口空中纜車',
- d:'在 Port Vell 海邊的聖誕市集，可順便逛港口和 Maremagnum。',tr:'L4 Barceloneta 或 L3 Drassanes 步行。'},
-{id:'espanyol',day:3,ord:2,ic:'⚽',n:'皇家西班牙人 vs 巴塞隆納（德比）',en:'RCD Espanyol – FC Barcelona · RCDE Stadium',lat:41.3479,lng:2.0756,addr:'Av. Baix Llobregat 100, Cornellà',
- tags:['1/3 週日 主場','票難買'],warn:['開賽時間尚未公布(TBD)','票務請看 rcdespanyol.com','1/10 對 Betis 在行程之外'],time:'依賽程（TBD）',
- d:'LaLiga 賽程列為 2027/1/3 西班牙人主場對巴薩，是加泰同城德比，氣氛熱烈但票很難買。',tr:'官方：Cornellà Centre 站（Renfe/地鐵 L5）步行約 12 分，或 FGC Cornellà Centre 步行 5 分；公車 67/68。開賽前 1.5 小時出發。',
- link:'https://www.rcdespanyol.com/'},
-{id:'montserrat',day:4,ord:1,ic:'⛰️',n:'聖山 蒙特塞拉特',en:'Montserrat',lat:41.5933,lng:1.8377,addr:'Santa Maria de Montserrat',
- tags:['一日遊','自然公園','世界遺產預備'],warn:['冬季班次請查 FGC / 齒軌或空中纜車官網','週一仍可前往'],time:'08:30 出發 · 約 18:00 回程',
- d:'鋸齒狀山峰、本篤會修道院與黑聖母。可坐 Cremallera 齒軌或 Aeri 纜車上山，再選 Sant Joan 纜車看更高景觀。',tr:'Universitat 搭 L1 約 2–3 站到 Plaça Espanya → FGC R5 往 Manresa：Monistrol 轉齒軌 / Montserrat-Aeri 轉纜車。首班約 8:36，之後約每小時一班。'},
-{id:'dali',day:5,ord:1,ic:'🎨',n:'達利戲劇博物館',en:'Dalí Theatre-Museum · Figueres',lat:42.2679,lng:2.9609,addr:'Plaça Gala-Salvador Dalí 5, Figueres',
- tags:['一日遊','預約','週二安排'],warn:['1/1 休館；週一是否休館各來源不一，故排在週二','冬季約 10:30–18:00，請查官網'],time:'07:30 出發 · 約 19:00 回程',
- d:'超現實主義大師達利親自設計的博物館與他的墓室所在。',tr:'Barcelona Sants 或 Passeig de Gràcia 搭 Renfe 區域列車（R11）或 Avant 到 Figueres，博物館距車站步行約 10–15 分。車程約 1–2 小時依車種，請查 renfe.com。'}
-];
-
-// ===== 每日行程（含非確定景點）=====
-const DAYS=[
-{d:1,t:'巴特由 + 米拉 + 恩典大道',s:'國定假日，多數商店休息；高第建築通常有開，先確認。早上巴特由之家，午餐 Passeig de Gràcia 一帶，下午米拉之家。晚上可去 Bel-Luna Jazz（離市中心約 10 分）。'},
-{d:2,t:'桂爾公園 + 聖家堂',s:'早場桂爾公園 → 公車返回市區午餐 → 午後聖家堂。順路加 Casa Vicens（見分頁二）。'},
-{d:3,t:'Sant Antoni 週日市集 + 德比賽事',s:'早上逛 Mercat de Sant Antoni 週日書市，再走到旁邊 Gran Via 的 Fira de Reis 聖誕市集（兩者相鄰），午後搭地鐵到 Cornellà 看球。若比賽在晚上，白天可加 Plaça Reial 週日郵幣市集。'},
-{d:4,t:'聖山 Montserrat 一日遊',s:'FGC R5 從 Plaça Espanya 出發。出發前可在 Poble-sec 吃早午餐，回程在 Plaça Espanya 逛 Arenas 頂樓看夕陽。'},
-{d:5,t:'達利戲劇博物館（Figueres）',s:'整天外出。1/5 傍晚為三王節遊行（Cabalgata de Reis），若趕得回來再去看，路線請查官方。'},
-{d:6,t:'蒙居意克山 Montjuïc（三王節）',s:'假日商店休息。山上纜車、城堡、Mirador del Alcalde、Poble Espanyol，傍晚魔幻噴泉（冬季表演時間請查）。晚餐 Poble-sec 酒吧街。'},
-{d:7,t:'冬季特賣日 + 哥德區',s:'1/7 特賣開始：Portal de l\'Àngel、El Corte Inglés、Passeig de Gràcia。週四有 Pl. Nova 古董市集。晚上 Harlem Jazz Club。'},
-{d:8,t:'聖保羅醫院 + 港口',s:'上午 Hospital Sant Pau（世遺）→ Encants 市集（週五有）→ 下午 Port Vell 港口聖誕市集、Barceloneta、港口空中纜車、Maremagnum。'},
-{d:9,t:'機動日：Tibidabo / 市集收尾',s:'Tibidabo 頂看市景（可搭觀光纜車）；或週六市集：Moll Drassanes、Pl. del Pi 畫家市集。最後採買伴手禮。'}
-];
-
-// ===== 書本推薦（高價位已刪）× 搭配 =====
-// with: 與哪個確定景點一起；why: 為何順路
-const PICKS=[
-{id:'p1',n:'聖保羅醫院',en:'Hospital de Sant Pau',cat:'世界遺產',ic:'🏥',lat:41.4115,lng:2.1744,addr:'C/ Sant Antoni Maria Claret 167',with:['sagrada'],why:'與聖家堂只隔一條 Av. Gaudí（步行約 10 分），同日最順',tr:'步行；或 L5 Sant Pau/Dos de Maig',day:8},
-{id:'p2',n:'文森之家',en:'Casa Vicens',cat:'世界遺產·高第',ic:'🏠',lat:41.4033,lng:2.1514,addr:'Carrer de les Carolines 20',with:['guell'],why:'高第第一件住宅作品，在 Gràcia，離桂爾公園約 15–20 分步行',tr:'L3 Fontana 站步行 5 分；與桂爾公園之間步行約 20 分',day:2},
-{id:'p3',n:'桂爾宮',en:'Palau Güell',cat:'世界遺產·高第',ic:'🏛️',lat:41.3794,lng:2.1742,addr:'Carrer Nou de la Rambla 3-5',with:['free'],why:'老城區 Rambla 旁，可與 Plaça Reial、爵士夜安排同日',tr:'L3 Liceu 站步行 3 分',day:7},
-{id:'p4',n:'加泰隆尼亞音樂廳',en:'Palau de la Música Catalana',cat:'世界遺產',ic:'🎻',lat:41.3875,lng:2.1753,addr:'C/ Palau de la Música 4-6',with:['batllo'],why:'離市中心約 15 分步行，與巴特由之家同為現代主義建築；可看導覽或音樂會',tr:'L1/L4 Urquinaona 站步行 4 分',day:7},
-{id:'p5',n:'Mirador del Alcalde（市長瞭望台）',en:'Mirador del Alcalde',cat:'觀景點',ic:'🌇',lat:41.3669,lng:2.1658,addr:'Carretera de Montjuïc s/n',with:['free'],why:'日落觀景，和纜車、城堡同一座山，建議 1/6 整天排 Montjuïc',tr:'Paral·lel 搭地下纜車 Funicular + Telefèric 上山',day:6},
-{id:'p6',n:'蒙居意克纜車 + 城堡',en:'Telefèric de Montjuïc',cat:'觀光纜車',ic:'🚠',lat:41.3637,lng:2.1664,addr:'Carretera de Montjuïc 41',with:['free'],why:'與 Mirador 同一座山，1/6 山上日；冬季可能維修，請先查',tr:'Paral·lel（L2/L3）→ Funicular → 纜車；需另購票，不含在地鐵票',day:6},
-{id:'p7',n:'Arenas de Barcelona 頂樓',en:'Arenas de Barcelona',cat:'觀景點·購物',ic:'🏬',lat:41.3768,lng:2.1495,addr:'Gran Via de les Corts Catalanes 373-385',with:['montserrat'],why:'Plaça Espanya 就是去 Montserrat 的起點，回程順路看夕陽、逛街',tr:'Espanya 站（L1/L3/L8、FGC）',day:4},
-{id:'p8',n:'Poble-sec 酒吧街：Quimet & Quimet 等',en:'Quimet & Quimet',cat:'餐廳 💲',ic:'🍤',lat:41.3745,lng:2.1635,addr:'C/ Poeta Cabanyes 25',with:['montserrat'],why:'書上推薦站著吃的罐頭 Tapas，離 Plaça Espanya 步行 10 分；Cañota、Rias de Galicia 在 C/Lleida 同一帶',tr:'Paral·lel 站步行 5 分',day:4},
-{id:'p9',n:'Cervecería Catalana',en:'Cervecería Catalana',cat:'餐廳 💲💲',ic:'🍺',lat:41.3943,lng:2.1627,addr:'C/ Mallorca 236',with:['batllo','milà'],why:'離巴特由與米拉之家都步行 5 分，書上傳統 Tapas',tr:'步行',day:1},
-{id:'p10',n:'Tapas 24',en:'Tapas 24',cat:'餐廳 💲',ic:'🥘',lat:41.3912,lng:2.1647,addr:'C/ Diputació 269',with:['batllo'],why:'Passeig de Gràcia 旁平價 Tapas，午餐最適合',tr:'步行',day:1},
-{id:'p11',n:'Bar Mut',en:'Bar Mut',cat:'餐廳 💲💲💲',ic:'🍷',lat:41.3939,lng:2.1647,addr:'C/ Pau Claris 192',with:['milà'],why:'米拉之家附近，書上 Tapas 名單（價位偏高，可選項）',tr:'步行 5 分',day:1},
-{id:'p12',n:'Bel-Luna Jazz Club',en:'Bel-Luna Jazz Club',cat:'爵士',ic:'🎷',lat:41.3872,lng:2.1707,addr:'Rambla de Catalunya 5',with:['batllo'],why:'離市中心約 10 分，晚上聽爵士；營業狀態請再確認',tr:'步行',day:1,warn:true},
-{id:'p13',n:'Mercat de Sant Antoni 週日市集',en:'Sant Antoni Sunday Market',cat:'市集',ic:'📚',lat:41.3781,lng:2.163,addr:'C/ Comte d\'Urgell 11',with:['fireareis'],why:'1/3 週日早上逛（約 8:30–14:30），離市中心約 10 分；二手書、黑膠、漫畫',tr:'步行，或 L2 Sant Antoni',day:3},
-{id:'p14',n:'Plaça Reial 週日郵幣市集',en:'Plaça Reial Stamp & Coin Market',cat:'市集',ic:'🪙',lat:41.38,lng:2.1753,addr:'Plaça Reial 1',with:['espanyol'],why:'週日早上 9:00–14:30，之後可轉搭地鐵去賽場；旁邊 Jamboree 爵士',tr:'L3 Liceu 站',day:3},
-{id:'p15',n:'Jamboree Jazz & Dance Club',en:'Jamboree',cat:'爵士',ic:'🎷',lat:41.38,lng:2.1753,addr:'Plaça Reial 17',with:['espanyol'],why:'1/3 賽後晚上聽爵士（較省）；2025 年來源仍營業',tr:'L3 Liceu 站',day:3},
-{id:'p16',n:'Mercat Gòtic 古董市集（週四）',en:'Mercat Gòtic Antiguitats',cat:'市集',ic:'🏺',lat:41.3841,lng:2.1763,addr:'Plaça Nova 1',with:['free'],why:'1/7（週四）有；在大教堂前，順路逛哥德區',tr:'L4 Jaume I / L3 Catalunya 步行',day:7},
-{id:'p17',n:'Harlem Jazz Club',en:'Harlem Jazz Club',cat:'爵士',ic:'🎶',lat:41.3832,lng:2.1768,addr:'C/ Comtessa de Sobradiel 8',with:['free'],why:'哥德區小巷，晚上注意扒手；2025 年來源仍營業',tr:'L4 Jaume I 步行 5 分',day:7},
-{id:'p18',n:'Portal de l\'Àngel + El Corte Inglés 特賣',en:'Portal de l\'Àngel',cat:'購物',ic:'🛍️',lat:41.3862,lng:2.1722,addr:'Portal de l\'Àngel',with:['free'],why:'離市中心步行 5–10 分；1/7 特賣開始（約至 2 月底）',tr:'步行',day:7},
-{id:'p19',n:'Mercat dels Encants（週五）',en:'Mercat dels Encants',cat:'市集',ic:'🧺',lat:41.405,lng:2.1888,addr:'C/ Castillejos 158',with:['sagrada'],why:'書上：週一/三/五/六 9:00–20:00。與聖家堂同線（L1 / 公車）；Glòries 商場旁',tr:'L1 Glòries 站',day:8,warn:true},
-{id:'p20',n:'Centre Comercial Glòries',en:'Glòries Mall',cat:'購物',ic:'🏬',lat:41.403,lng:2.1895,addr:'Av. Diagonal 208',with:['sagrada'],why:'與 Encants 相鄰，平價購物中心',tr:'L1 Glòries',day:8},
-{id:'p21',n:'Barceloneta 老店：El Vaso de Oro / Cova Fumada',en:'Barceloneta tapas',cat:'餐廳 💲',ic:'🦐',lat:41.3797,lng:2.1887,addr:'C/ Baluart 56',with:['free'],why:'1/8 港口日午餐；Cova Fumada 是 Bomba 炸肉丸發源地，Vaso de Oro 也在同區',tr:'L4 Barceloneta',day:8},
-{id:'p22',n:'港口空中纜車',en:'Transbordador Aeri del Port',cat:'觀光纜車',ic:'🚡',lat:41.3725,lng:2.1862,addr:'Passeig de Jean Gabriel Estruch',with:['free'],why:'1/8 港口日：午餐後搭纜車；營運狀態請查官網',tr:'L4 Barceloneta + 步行',day:8,warn:true},
-{id:'p23',n:'Maremagnum 商場',en:'Maremagnum',cat:'購物·觀景',ic:'⚓',lat:41.3753,lng:2.183,addr:'Moll d\'Espanya 5',with:['free'],why:'港口購物中心，頂樓景觀；週日也常營業',tr:'L3 Drassanes 步行 15 分 或 L4 Barceloneta',day:8},
-{id:'p24',n:'Tibidabo 山頂 + Mirablau',en:'Tibidabo',cat:'觀景點',ic:'🎡',lat:41.4225,lng:2.1187,addr:'Plaça del Tibidabo',with:['free'],why:'和桂爾公園同在北邊山區但不順路，建議 1/9 機動日單獨排',tr:'FGC L7 到 Av. Tibidabo；Tramvia Blau 已停駛，改公車/計程車到 Plaça Doctor Andreu 再搭 Funicular（請以 Google Maps 為準）',day:9,warn:true},
-{id:'p25',n:'Jazz Room - La Cova del Drac',en:'Jazz Room',cat:'爵士',ic:'🎼',lat:41.4005,lng:2.1475,addr:'C/ Vallmajor 33',with:['free'],why:'在 Sant Gervasi，晚上單獨去；營業狀態請再確認',tr:'FGC Muntaner / Plaça Molina',day:9,warn:true},
-{id:'p26',n:'Moll de les Drassanes 古董市集（週六）',en:'Fira Brocanters',cat:'市集',ic:'🪑',lat:41.375,lng:2.1795,addr:'Moll Drassanes 1',with:['free'],why:'1/9 週六 11:00–21:00，靠 Drassanes 港口；與 Rambla 同線',tr:'L3 Drassanes',day:9,warn:true},
-{id:'p27',n:'Pintors del Pi 畫家市集（週六）',en:'Mostra d\'Art Pintors del Pi',cat:'市集',ic:'🖼️',lat:41.3825,lng:2.1741,addr:'Pl. Sant Josep Oriol 1',with:['free'],why:'1/9 週六 11:00–20:00，哥德區 Pl. del Pi；離市中心步行約 15 分',tr:'L3 Liceu / 步行',day:9}
-];
-
-// ===== 美食補給：超市 / 咖啡 / 小吃·午餐（標記為概略位置，點地圖連結以店名搜尋最準）=====
-const AREA={hotel:'🏨 市中心周邊',batllo:'🐉 巴特由·米拉',sagrada:'⛪ 聖家堂',guell:'🦎 桂爾公園·Gràcia',fireareis:'🎄 Sant Antoni·聖誕市集',montjuic:'🌇 Montjuïc·Poble-sec',port:'⚓ 港口·Born·Barceloneta',montserrat:'⛰️ 聖山',dali:'🎨 Figueres 達利'};
-const EATS=[
-{id:'e1',cat:'super',n:'Carrefour Express（Gran Via 573，近 Universitat）',en:'Carrefour Express Gran Via 573',ic:'🛒',lat:41.3857,lng:2.1612,addr:'Gran Via de les Corts Catalanes 573',near:'hotel',p:1,why:'離市中心最近的超市之一，買水、水果、優格、三明治。資料來自較舊的指南，請先用地圖確認仍營業。',warn:1},
-{id:'e2',cat:'super',n:'Mercadona（Consell de Cent 301）',en:'Mercadona Consell de Cent 301',ic:'🛒',lat:41.3925,lng:2.1657,addr:'Carrer del Consell de Cent 301',near:'batllo',p:1,why:'西班牙平價連鎖超市，離 Passeig de Gràcia 近，適合買零食與熟食。',warn:1},
-{id:'e3',cat:'super',n:'Mercadona（Casp 33）',en:'Mercadona Carrer de Casp 33',ic:'🛒',lat:41.3888,lng:2.1721,addr:'Carrer de Casp 33',near:'hotel',p:1,why:'靠近 Plaça Catalunya／Urquinaona，從市中心步行約 10–15 分。',warn:1},
-{id:'e4',cat:'super',n:'Mercadona（Freixures 2，Born 區）',en:'Mercadona Carrer de Freixures 2',ic:'🛒',lat:41.383,lng:2.184,addr:'Carrer de Freixures 2',near:'port',p:1,why:'Born／港口一帶，逛港口日順路補給。',warn:1},
-{id:'e5',cat:'super',n:'El Corte Inglés 超市（Plaça Catalunya）',en:'El Corte Inglés Plaça Catalunya supermarket',ic:'🏬',lat:41.3869,lng:2.17,addr:'Plaça de Catalunya 14',near:'hotel',p:2,why:'離市中心步行約 5 分，進口食品與伴手禮（橄欖油、Turrón）選擇多，價格較高；超市樓層請確認。',warn:1},
-{id:'e6',cat:'super',n:'La Boqueria 市場',en:'Mercat de la Boqueria',ic:'🍓',lat:41.3817,lng:2.1719,addr:'La Rambla 91',near:'hotel',p:2,why:'步行約 10 分。鮮果汁、火腿與小吃；遊客多、扒手多。週日休息，1/1、1/6 多半不營業。',warn:1},
-
-{id:'c1',cat:'coffee',n:'Granja M. Viader（熱巧克力）',en:'Granja M. Viader',ic:'☕',lat:41.3825,lng:2.17,addr:'Carrer d\'en Xuclà 4',near:'hotel',p:1,why:'老牌牛奶店，招牌是熱巧克力與奶泡，離市中心步行約 8 分。',warn:1},
-{id:'c9',cat:'coffee',n:'Granja Dulcinea（Churros 熱巧克力）',en:'Granja Dulcinea',ic:'🍫',lat:41.3833,lng:2.1737,addr:'Carrer de Petritxol 2',near:'hotel',p:1,why:'巷子裡的老字號 churros 配濃稠熱巧克力，步行到市中心約 10 分。',warn:1},
-{id:'c2',cat:'coffee',n:'Federal Café',en:'Federal Café',ic:'☕',lat:41.3757,lng:2.1628,addr:'Carrer del Parlament 39',near:'fireareis',p:2,why:'Sant Antoni 區知名咖啡與早午餐，離週日書市與 Fira de Reis 都很近，1/3 逛完可來。',warn:1},
-{id:'c3',cat:'coffee',n:'Faborit Café（Casa Amatller 內）',en:'Faborit Café Casa Amatller',ic:'🍫',lat:41.3913,lng:2.1651,addr:'Passeig de Gràcia 41',near:'batllo',p:2,why:'在巴特由之家隔壁的現代主義建築內，熱巧克力配 melindros 餅乾。',warn:1},
-{id:'c4',cat:'coffee',n:'El Magnífico（老牌烘豆咖啡）',en:'Cafés El Magnífico',ic:'☕',lat:41.3846,lng:2.1814,addr:'Carrer de l\'Argenteria 64',near:'port',p:2,why:'Born 區老牌烘豆店，可順買咖啡豆當伴手禮。',warn:1},
-{id:'c5',cat:'coffee',n:'Nomad Coffee Lab & Shop',en:'Nomad Coffee Lab & Shop',ic:'☕',lat:41.385,lng:2.1795,addr:'Passatge Sert 12',near:'port',p:2,why:'Nomad 在 2026「世界 100 大咖啡店」排名第 16，精品咖啡首選；營業時間請先查。',warn:1},
-{id:'c6',cat:'coffee',n:'Satan\'s Coffee Corner',en:'Satan\'s Coffee Corner',ic:'☕',lat:41.3829,lng:2.1771,addr:'Carrer de l\'Arc de Sant Ramon del Call 11',near:'port',p:2,why:'哥德區精品咖啡店，逛 Plaça Sant Jaume 與大教堂時順路。',warn:1},
-{id:'c7',cat:'coffee',n:'Zentral Specialty Coffee & Bakery',en:'Zentral Specialty Coffee Bakery',ic:'🥐',lat:41.401,lng:2.1573,addr:'Travessera de Gràcia 273',near:'guell',p:2,why:'Gràcia 的精品咖啡與烘焙，爬桂爾公園前後補給。',warn:1},
-{id:'c8',cat:'coffee',n:'Cosa Bake & Coffee',en:'Cosa Bake & Coffee',ic:'🥐',lat:41.3995,lng:2.16,addr:'Travessera de Gràcia 138',near:'guell',p:2,why:'甜點咖啡店；週一休息。',warn:1},
-
-{id:'s1',cat:'sweet',n:'Escribà（Rambla 83 老店）',en:'Escribà Rambla 83',ic:'🍰',lat:41.3815,lng:2.1707,addr:'La Rambla 83',near:'hotel',p:2,why:'百年甜點世家，新藝術風格建築，可頌、巧克力與蛋糕有名；離市中心步行約 10 分，旁邊就是 Boqueria。三王節期間賣 Tortell de Reis 國王蛋糕。',warn:1},
-{id:'s2',cat:'sweet',n:'Escribà（Gran Via 546 分店）',en:'Escribà Gran Via 546',ic:'🍰',lat:41.3828,lng:2.1595,addr:'Gran Via de les Corts Catalanes 546',near:'fireareis',p:2,why:'離 Fira de Reis（Gran Via）與 Sant Antoni 很近，1/3 逛完市集順路買甜點。',warn:1},
-{id:'s3',cat:'sweet',n:'Hofmann Pastisseria（馬斯卡彭可頌）',en:'Hofmann Pastisseria Born',ic:'🥐',lat:41.3849,lng:2.1816,addr:'Carrer dels Flassaders 44',near:'port',p:2,why:'Born 區名店，馬斯卡彭餡可頌是招牌；書上一星餐廳 Hofmann 同名學校的甜點店。',warn:1},
-{id:'s4',cat:'sweet',n:'Bubó（得獎巧克力甜點）',en:'Bubó Born',ic:'🍫',lat:41.3836,lng:2.1829,addr:'Carrer de les Caputxes 10',near:'port',p:3,why:'Born 區知名精緻甜點與巧克力，價位偏高；各來源對分店位置說法不一，請看地圖。',warn:1},
-{id:'s5',cat:'sweet',n:'Pastisseria Mauri（1929 年創立）',en:'Pastisseria Mauri',ic:'🎂',lat:41.3955,lng:2.1613,addr:'Rambla de Catalunya 102',near:'batllo',p:2,why:'傳統甜點與茶室，離米拉之家步行約 8 分；三王節前後也有國王蛋糕。',warn:1},
-{id:'s6',cat:'sweet',n:'La Colmena（Xuixo 奶油炸甜甜圈）',en:'La Colmena pastry Barcelona',ic:'🍩',lat:41.3846,lng:2.1759,addr:'Plaça de l\'Àngel 12',near:'hotel',p:1,why:'1849 年老店，必吃 xuixo（卡士達餡炸捲，加泰隆尼亞點心）；離哥德區大教堂近。',warn:1},
-{id:'f1',cat:'eat',n:'La Rita（午間套餐）',en:'La Rita Barcelona',ic:'🍽️',lat:41.3926,lng:2.1634,addr:'Carrer d\'Aragó 279',near:'batllo',p:1,why:'Passeig de Gràcia 附近，有人推薦的午間套餐（約 €15 以內，請以現價為準）。',warn:1},
-{id:'f2',cat:'eat',n:'Cervecería Catalana（午間套餐約 €13）',en:'Cervecería Catalana',ic:'🍺',lat:41.3943,lng:2.1627,addr:'Carrer de Mallorca 236',near:'batllo',p:2,why:'書本推薦；離巴特由之家步行 5 分，午餐有 €13 左右的套餐（需確認現價），人多要等位。'},
-{id:'f3',cat:'eat',n:'Tapas 24',en:'Tapas 24',ic:'🍤',lat:41.3912,lng:2.1647,addr:'Carrer de la Diputació 269',near:'batllo',p:1,why:'書本推薦，Passeig de Gràcia 旁的平價 Tapas。'},
-{id:'f4',cat:'eat',n:'Bardeni-Caldeni（可樂餅與伊比利火腿）',en:'Bardeni Caldeni',ic:'🥩',lat:41.4018,lng:2.1757,addr:'Carrer de València 454',near:'sagrada',p:2,why:'書本推薦；聖家堂步行約 8 分，當地客多，可樂餅有名。'},
-{id:'f5',cat:'eat',n:'Puiggròs 烘焙咖啡',en:'Puiggròs bakery',ic:'🥐',lat:41.4048,lng:2.1741,addr:'Avinguda de Gaudí',near:'sagrada',p:1,why:'聖家堂旁大道上的麵包店兼咖啡，08:00–20:45，週日休息（請確認）。',warn:1},
-{id:'f6',cat:'eat',n:'Buenas Migas Sagrada Família',en:'Buenas Migas Sagrada Família',ic:'🥪',lat:41.4033,lng:2.1767,addr:'Carrer de Padilla',near:'sagrada',p:1,why:'輕食三明治與咖啡，平日 9:00–20:00；請確認 1/2 週六時間。',warn:1},
-{id:'f7',cat:'eat',n:'Oso Grizzly（酵母麵包）',en:'Oso Grizzly bakery',ic:'🥖',lat:41.4033,lng:2.1565,addr:'Carrer del Planeta 37',near:'guell',p:1,why:'Gràcia 小麵包店，酸種麵包與鹹甜麵包，靠近 Plaça del Sol。',warn:1},
-{id:'f8',cat:'eat',n:'Carrer de Blai 平價 Pintxos 街',en:'Carrer de Blai Poble-sec',ic:'🍢',lat:41.3732,lng:2.1651,addr:'Carrer de Blai',near:'montjuic',p:1,why:'Poble-sec 的小酒吧街，常見 pintxos 每個約 €1–2（需確認）；1/6 下山後晚餐首選。',warn:1},
-{id:'f9',cat:'eat',n:'Quimet & Quimet（罐頭 Tapas）',en:'Quimet & Quimet',ic:'🥫',lat:41.3745,lng:2.1635,addr:'Carrer del Poeta Cabanyes 25',near:'montjuic',p:1,why:'書本推薦，站著吃的小店，離 Plaça Espanya 約 10 分。'},
-{id:'f10',cat:'eat',n:'La Cova Fumada（Bomba 發源地）',en:'La Cova Fumada',ic:'🍖',lat:41.3797,lng:2.1887,addr:'Carrer del Baluart 56',near:'port',p:1,why:'書本推薦；Barceloneta 炸肉丸 bomba 的發源地，1/8 港口日午餐。'},
-{id:'f11',cat:'eat',n:'El Xampanyet（Cava 與小吃）',en:'El Xampanyet',ic:'🥂',lat:41.3853,lng:2.1812,addr:'Carrer de Montcada 22',near:'port',p:1,why:'書本推薦；Born 區老酒吧，氣泡酒配鯷魚小吃。'},
-{id:'f12',cat:'eat',n:'Bar Cañete',en:'Bar Cañete',ic:'🍷',lat:41.3797,lng:2.1741,addr:'Carrer de la Unió 17',near:'hotel',p:2,why:'書本推薦的傳統 Tapas，在 Liceu 附近，離市中心步行約 12 分。'},
-{id:'f13',cat:'eat',n:'Hotel Duran 餐廳（達利常去）',en:'Hotel Duran restaurant Figueres',ic:'🍽️',lat:42.2676,lng:2.9612,addr:'Carrer de Lasauca 5, Figueres',near:'dali',p:2,why:'Figueres 老牌旅館餐廳，有加泰料理午間套餐，離達利博物館步行約 250 公尺。',warn:1},
-{id:'f14',cat:'eat',n:'Urban Coffee & Brunch（Figueres）',en:'Urban Coffee & Brunch Figueres',ic:'🥞',lat:42.2678,lng:2.9615,addr:'Figueres',near:'dali',p:1,why:'有人推薦為博物館附近最佳早餐/早午餐；地址請看地圖。',warn:1},
-{id:'f15',cat:'eat',n:'Nomada Restaurant & Brunch（Figueres）',en:'Nomada Restaurant Brunch Figueres',ic:'🥗',lat:42.2677,lng:2.9607,addr:'Figueres',near:'dali',p:2,why:'素食友善，離博物館一個街角；請看地圖確認。',warn:1},
-{id:'f16',cat:'eat',n:'Montserrat 山上 Mató 配蜂蜜',en:'Montserrat plaza mató honey',ic:'🍯',lat:41.5934,lng:1.8378,addr:'Plaça de la Creu, Montserrat',near:'montserrat',p:1,why:'山上特產：Mató（鮮乳酪）淋蜂蜜，以及自助餐廳。搜尋沒找到可靠店名，現場看。',warn:1}
-];
-const EAREA_ORDER=Object.keys(AREA);
-const DAYAREA={1:['batllo','hotel'],2:['guell','sagrada'],3:['fireareis'],4:['montserrat'],5:['dali'],6:['montjuic'],7:['hotel','port'],8:['port','sagrada'],9:['hotel']};
-let eatC='all',eatA='all';
+document.title=CONFIG.title;document.querySelector('.logo').innerHTML=CONFIG.logoHtml;document.getElementById('hdrNote').textContent=CONFIG.headerNote;
+let LANG='zh-TW',tab=1,dayF=0,anchF='all',eatC='all',eatA='all',curSel=null,openId=null,sheetOpen=false,mapHidden=false;
+const openDays=new Set([1]);
+const mob=()=>matchMedia('(max-width:820px)').matches;
+const $=id=>document.getElementById(id);
+const maps=(n,a)=>'https://www.google.com/maps/search/?api=1&hl='+LANG+'&query='+encodeURIComponent(n+' '+(a||'')+' '+CONFIG.city);
+const dir=(lat,lng)=>`https://www.google.com/maps/dir/?api=1&hl=${LANG}&origin=${encodeURIComponent(CONFIG.startQuery)}&destination=${lat},${lng}&travelmode=transit`;
 const CATLBL={all:'全部',super:'🛒 超市',coffee:'☕ 咖啡',eat:'🥐 小吃·午餐',sweet:'🍰 必吃甜點'};
 const CATCOL={super:'#2e7d32',coffee:'#6d4c41',eat:'#e63946',sweet:'#d81b60'};
-const PLE={1:'💲 省',2:'💲💲 中',3:'💲💲💲'};
-function eatCard(e){
- return `<div class="card" data-id="${e.id}"><div class="thumb" style="background:linear-gradient(135deg,${CATCOL[e.cat]},#222a)">${e.ic}</div><div>
- <h3>${e.n}<small>${e.en}</small></h3>
- <div class="meta"><span class="tag">${CATLBL[e.cat]}</span><span class="tag">${AREA[e.near]}</span><span class="tag ok">${PLE[e.p]}</span>${e.warn?'<span class="tag warn">⚠️ 請確認營業/位置</span>':''}</div>
- <p>${e.why}</p>
- <div class="links"><a target="_blank" rel="noopener" href="${maps(e.en,e.addr)}">📍 地圖</a><a target="_blank" rel="noopener" href="${dir(e.lat,e.lng)}">🧭 從市中心大眾運輸</a></div></div></div>`;
-}
+const PLE={1:'💲 省',2:'💲💲 中',3:'💲💲💲 偏高'};
+const AREAOF={batllo:'batllo',milà:'batllo',guell:'guell',sagrada:'sagrada',fireareis:'fireareis',montserrat:'montserrat',dali:'dali',nadalport:'port'};
+const findObj=id=>FIX.find(x=>x.id===id)||PICKS.find(x=>x.id===id)||EATS.find(x=>x.id===id);
+const dayStr=d=>DATES[d-1].split(' ');
+const short=s=>s.split('（')[0].split(' (')[0];
 
-const ANCH={fireareis:'聖誕市集',batllo:'巴特由之家',milà:'米拉之家',guell:'桂爾公園',sagrada:'聖家堂',espanyol:'球賽',montserrat:'聖山',free:'機動日/無確定景點'};
-
-// ===== UI =====
-let map=L.map('map',{zoomControl:true}).setView([41.395,2.17],12);
+/* ----- 地圖 ----- */
+const map=L.map('map',{zoomControl:true}).setView(CONFIG.mapCenter,CONFIG.mapZoom);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
-let layer=L.layerGroup().addTo(map), mk={};
+const layer=L.layerGroup().addTo(map);let mk={};
 const pin=(c,t)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${t}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
-const hotelMk=L.marker([HOTEL.lat,HOTEL.lng],{icon:L.divIcon({className:'',html:'<div style="font-size:26px">🏨</div>',iconSize:[26,26],iconAnchor:[13,13]})}).addTo(map).bindPopup('<b>出發點 Plaça de Catalunya</b>');
-
-const side=document.getElementById('side');
-let tab=1, dayF=0, anchF='all', curSelKeep=false;
-
-function fixCard(f){
- const col=DAYCOL[f.day-1];
- return `<div class="card" data-id="${f.id}"><div class="thumb" style="background:linear-gradient(135deg,${col},#222a)"><b>${DATES[f.day-1].split(' ')[0]}</b>${f.ic}</div><div>
- <h3>${f.n}<small>${f.en}</small></h3>
- <div class="meta">${f.tags.map(t=>`<span class="tag ok">${t}</span>`).join('')}${(f.warn||[]).map(t=>`<span class="tag warn">⚠️ ${t}</span>`).join('')}</div>
- <p>${f.d}</p><div class="row">🕘 ${f.time}</div><div class="row">🚇 ${f.tr}</div>
- <div class="links"><a target="_blank" rel="noopener" href="${maps(f.en,f.addr)}">📍 地圖</a><a target="_blank" rel="noopener" href="${dir(f.lat,f.lng)}">🧭 從市中心大眾運輸</a>${f.link?`<a target="_blank" rel="noopener" href="${f.link}">🔗 官網</a>`:''}</div></div></div>`;
+L.marker([HOTEL.lat,HOTEL.lng],{icon:L.divIcon({className:'',html:'<div style="font-size:24px">📍</div>',iconSize:[24,24],iconAnchor:[12,24]})}).addTo(map).bindPopup('<b>出發點 '+HOTEL.n+'</b>');
+const gm=$('gm');
+const embed=q=>{gm.src='https://maps.google.com/maps?hl='+LANG+'&z=15&output=embed&q='+encodeURIComponent(q)};
+const embedRoute=st=>{gm.src='https://maps.google.com/maps?hl='+LANG+'&output=embed&dirflg=r&saddr='+encodeURIComponent(CONFIG.startQuery)+'&daddr='+st.map(encodeURIComponent).join('+to:')};
+function dayRouteUrl(d){const fx=FIX.filter(f=>f.day===d).sort((a,b)=>a.ord-b.ord);if(!fx.length)return null;
+ const last=fx[fx.length-1],wp=fx.slice(0,-1).map(f=>f.lat+','+f.lng).join('|');
+ return `https://www.google.com/maps/dir/?api=1&hl=${LANG}&travelmode=transit&origin=${encodeURIComponent(CONFIG.startQuery)}&destination=${last.lat},${last.lng}`+(wp?`&waypoints=${encodeURIComponent(wp)}`:'');}
+const mapVisible=()=>mob()?sheetOpen:!mapHidden;
+function syncGoogle(){
+ if(!mapVisible())return;
+ const o=curSel&&findObj(curSel);
+ if(o)embed((o.en||o.n)+' '+o.addr+' '+CONFIG.city);
+ else if(tab===1&&dayF){const fx=FIX.filter(f=>f.day===dayF).sort((a,b)=>a.ord-b.ord);fx.length?embedRoute(fx.map(f=>f.lat+','+f.lng)):embed(CONFIG.startQuery)}
+ else embed(CONFIG.startQuery);
 }
-function pickCard(p){
- const col=DAYCOL[(p.day||1)-1];
- return `<div class="card" data-id="${p.id}"><div class="thumb" style="background:linear-gradient(135deg,${col}cc,#222a)">${p.ic}</div><div>
- <h3>${p.n}<small>${p.en}</small></h3>
- <div class="meta"><span class="tag">${p.cat}</span>${p.with.map(w=>`<span class="tag ok">配 ${ANCH[w]}</span>`).join('')}<span class="tag">建議 ${DATES[p.day-1].split(' ')[0]}</span>${p.warn?'<span class="tag warn">⚠️ 請確認營業</span>':''}</div>
- <p>${p.why}</p><div class="row">🚇 ${p.tr}</div>
- <div class="links"><a target="_blank" rel="noopener" href="${maps(p.en,p.addr)}">📍 地圖</a><a target="_blank" rel="noopener" href="${dir(p.lat,p.lng)}">🧭 從市中心大眾運輸</a></div></div></div>`;
+function showMode(g){gm.style.display=g?'block':'none';$('map').style.display=g?'none':'block';$('mG').classList.toggle('on',g);$('mO').classList.toggle('on',!g);if(!g)setTimeout(()=>map.invalidateSize(),60)}
+function openSheet(v){
+ sheetOpen=v;$('mapwrap').classList.toggle('open',v);$('navMap').classList.toggle('on',v);
+ if(v){syncGoogle();setTimeout(()=>map.invalidateSize(),260)}
+}
+function setMapHidden(h){mapHidden=h;$('app').classList.toggle('nomap',h);$('mapToggle').textContent=h?'🗺️ 顯示地圖':'🗺️ 隱藏地圖';if(!h){syncGoogle();setTimeout(()=>map.invalidateSize(),60)}}
+
+/* ----- 元件 ----- */
+const links=o=>`<a class="btn" target="_blank" rel="noopener" href="${maps(o.en||o.n,o.addr)}">Google 地圖 ↗</a><a class="btn" target="_blank" rel="noopener" href="${dir(o.lat,o.lng)}">🧭 大眾運輸路線</a>${o.link?`<a class="btn" target="_blank" rel="noopener" href="${o.link}">🔗 官網</a>`:''}`;
+function acc(o){
+ return `<div class="ac ${openId===o.id?'open':''} ${curSel===o.id?'sel':''}" data-id="${o.id}"><button class="ach" data-acc="${o.id}"><span class="ico" style="background:${o.col}">${o.ic}</span><span class="tt"><b>${o.t}</b><small>${o.en||''}</small><em>${o.sub||''}</em></span><span class="chev">▾</span></button>
+ <div class="acb">${o.meta?`<div class="meta">${o.meta}</div>`:''}${o.body}<div class="acts"><button class="btn pri" data-map="${o.id}">🗺️ 在地圖看</button>${links(o.obj)}</div></div></div>`;
+}
+const tagH=(t,c)=>`<span class="tag ${c||''}">${t}</span>`;
+function fixAcc(f){
+ return acc({id:f.id,ic:f.ic,col:DAYCOL[f.day-1],t:f.n,en:f.en,sub:'🕘 '+f.time,obj:f,
+  meta:f.tags.map(t=>tagH(t,'ok')).join('')+(f.warn||[]).map(t=>tagH('⚠️ '+t,'warn')).join(''),
+  body:`<p>${f.d}</p><div class="row">🚇 ${f.tr}</div>`});
+}
+function pickAcc(p){
+ return acc({id:p.id,ic:p.ic,col:DAYCOL[(p.day||1)-1],t:p.n,en:p.en,sub:p.cat+' · 建議 '+dayStr(p.day)[0],obj:p,
+  meta:p.with.map(w=>tagH('配 '+ANCH[w],'ok')).join('')+(p.warn?tagH('⚠️ 請確認營業','warn'):''),
+  body:`<p>${p.why}</p><div class="row">🚇 ${p.tr}</div>`});
+}
+function eatAcc(e){
+ return acc({id:e.id,ic:e.ic,col:CATCOL[e.cat],t:e.n,en:e.en,sub:CATLBL[e.cat]+' · '+PLE[e.p],obj:e,
+  meta:tagH(AREA[e.near])+(e.warn?tagH('⚠️ 請確認營業／位置','warn'):''),
+  body:`<p>${e.why}</p>`});
+}
+const mini=(o,price)=>`<button class="mini" data-map="${o.id}"><span class="e">${o.ic}</span><b>${short(o.n)}</b><i>${price||''}</i></button>`;
+function nearHtml(f,shown){
+ const area=AREAOF[f.id];let h='';
+ const eats=(area&&!shown.has(area))?EATS.filter(e=>e.near===area&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,10):[];
+ if(area)shown.add(area);
+ const picks=PICKS.filter(p=>p.with[0]===f.id);
+ if(picks.length)h+=`<div class="nh">🎯 順路可玩／逛</div><div class="scroll">${picks.map(p=>mini(p,p.cat)).join('')}</div>`;
+ if(eats.length)h+=`<div class="nh">🍴 附近吃喝（價位低→高）</div><div class="scroll">${eats.map(e=>mini(e,PLE[e.p])).join('')}</div>`;
+ return h?`<div class="near">${h}</div>`:'';
 }
 
+/* ----- 渲染 ----- */
 function render(){
- layer.clearLayers(); mk={};
- let h='',pts=[[HOTEL.lat,HOTEL.lng]];
+ layer.clearLayers();mk={};
+ let h='';const pts=[[HOTEL.lat,HOTEL.lng]];
+ const addMk=(o,ic,col)=>{const m=L.marker([o.lat,o.lng],{icon:pin(col,ic)}).addTo(layer).bindPopup(`<b>${o.n}</b>`);m.on('click',()=>sel(o.id));mk[o.id]=m;pts.push([o.lat,o.lng]);};
  if(tab===1){
   h+=`<div class="chips"><button class="chip ${dayF===0?'on':''}" data-d="0">全部</button>${DATES.map((d,i)=>`<button class="chip ${dayF===i+1?'on':''}" data-d="${i+1}">${d}</button>`).join('')}</div>`;
   const days=dayF?[DAYS[dayF-1]]:DAYS;
   for(const D of days){
-   h+=`<div class="plan" style="border-left-color:${DAYCOL[D.d-1]}"><h2>Day ${D.d} · ${DATES[D.d-1]}｜${D.t}</h2><p>${D.s}</p>${(()=>{const es=EATS.filter(e=>(DAYAREA[D.d]||[]).includes(e.near)&&e.cat!=='super').slice(0,8);return es.length?`<div class="row" style="margin-top:6px">🍴 當天順路吃喝：${es.map(e=>`<a target="_blank" rel="noopener" href="${maps(e.en,e.addr)}">${e.ic}${e.n.split('（')[0]}</a>`).join(' · ')}</div>`:''})()}${dayRouteUrl(D.d)?`<a class="rt" target="_blank" rel="noopener" href="${dayRouteUrl(D.d)}">🧭 當日大眾運輸路線 / Day route (Google Maps)</a>`:''}</div>`;
    const fx=FIX.filter(f=>f.day===D.d).sort((a,b)=>a.ord-b.ord);
-   if(!fx.length) h+=`<div class="notice">今天沒有「確定景點」，建議參考分頁二的搭配。</div>`;
-   fx.forEach((f,i)=>{h+=fixCard(f);const m=L.marker([f.lat,f.lng],{icon:pin(DAYCOL[f.day-1],f.day)}).addTo(layer).bindPopup(`<b>${f.n}</b><br>${f.time}`);m.on('click',()=>sel(f.id));mk[f.id]=m;pts.push([f.lat,f.lng]);});
+   const isOpen=dayF?true:openDays.has(D.d);
+   const shown=new Set();let body='';
+   body+=`<p class="dtxt">${D.s}</p>`;
+   const rt=dayRouteUrl(D.d);if(rt)body+=`<a class="rt" target="_blank" rel="noopener" href="${rt}">🧭 當日大眾運輸路線（Google 地圖）</a>`;
+   if(fx.length){body+=`<div class="tl">`+fx.map(f=>`<div class="stop" style="--c:${DAYCOL[D.d-1]}">${fixAcc(f)}${nearHtml(f,shown)}</div>`).join('')+`</div>`;}
+   const free=PICKS.filter(p=>p.day===D.d&&p.with[0]==='free');
+   if(free.length)body+=`<div class="near"><div class="nh">🎯 今日推薦</div><div class="scroll">${free.map(p=>mini(p,p.cat)).join('')}</div></div>`;
+   const ar=(DAYAREA[D.d]||[]).filter(a=>!shown.has(a));
+   const es=EATS.filter(e=>ar.includes(e.near)&&e.cat!=='super').sort((a,b)=>a.p-b.p).slice(0,10);
+   if(es.length)body+=`<div class="near"><div class="nh">🍴 今日順路吃喝</div><div class="scroll">${es.map(e=>mini(e,PLE[e.p])).join('')}</div></div>`;
+   const sights=fx.map(f=>short(f.n)).join('、')||'機動日';
+   h+=`<div class="day ${isOpen?'open':''}" data-day="${D.d}"><button class="dh" data-dayt="${D.d}"><span class="dnum" style="background:${DAYCOL[D.d-1]}">${D.d}<small>${dayStr(D.d)[0]}</small></span><span class="dt"><b>${D.t}</b><em>${dayStr(D.d)[1]}｜${sights}</em></span><span class="chev">▾</span></button><div class="db">${body}</div></div>`;
+   fx.forEach(f=>addMk(f,D.d,DAYCOL[D.d-1]));
   }
-  h+=`<p class="notice">⚠️ 營業時間、票價與班次依官網為準，地圖與路線連結為 Google Maps 大眾運輸導航。圖片以插圖代替，未使用實景照。</p>`;
+  h+=`<p class="notice">⚠️ 營業時間、票價與班次依官網為準。點橫向小卡片可在地圖看位置；插圖為 emoji，未使用實景照。</p>`;
  }else if(tab===2){
   h+=`<div class="chips"><button class="chip ${anchF==='all'?'on':''}" data-a="all">全部</button>${Object.keys(ANCH).map(k=>`<button class="chip ${anchF===k?'on':''}" data-a="${k}">${ANCH[k]}</button>`).join('')}</div>`;
-  h+=`<div class="notice">書本推薦地點（高價位已刪除），告訴你「可以和哪個確定景點一起安排」。粉紅色大標=確定景點；彩色小標=推薦地點（顏色＝建議日）。</div>`;
-  const list=PICKS.filter(p=>anchF==='all'||p.with[0]===anchF);
-  const keys=Object.keys(ANCH).filter(k=>anchF==='all'||k===anchF||(anchF==='batllo'&&false));
-  keys.forEach(k=>{const f=FIX.find(x=>x.id===k); if(f){const m=L.marker([f.lat,f.lng],{icon:pin('#ff3b6b','★')}).addTo(layer).bindPopup(`<b>★ ${f.n}</b>`);mk[f.id]=m;pts.push([f.lat,f.lng]);}
-   const items=PICKS.filter(p=>p.with[0]===k); if(!items.length&&!f)return;
-   h+=`<div class="sec">★ ${ANCH[k]} 周邊／順路</div>`+(items.map(pickCard).join('')||'<div class="notice">此景點周邊暫無書本推薦。</div>');});
-  list.forEach(p=>{const m=L.marker([p.lat,p.lng],{icon:pin(DAYCOL[p.day-1],p.ic)}).addTo(layer).bindPopup(`<b>${p.n}</b><br>${p.why}`);m.on('click',()=>sel(p.id));mk[p.id]=m;pts.push([p.lat,p.lng]);});
+  h+=`<p class="hint">書本推薦地點（高價位已刪除）配合哪個確定景點一起排。點卡片展開細節。</p>`;
+  Object.keys(ANCH).filter(k=>anchF==='all'||k===anchF).forEach(k=>{
+   const f=FIX.find(x=>x.id===k);if(f)addMk(f,'★','#ff3b6b');
+   const items=PICKS.filter(p=>p.with[0]===k);if(!items.length)return;
+   h+=`<div class="sec">★ ${ANCH[k]} 周邊／順路</div>`+items.map(pickAcc).join('');
+   items.forEach(p=>addMk(p,p.ic,DAYCOL[p.day-1]));
+  });
  }else{
   h+=`<div class="chips">${Object.keys(CATLBL).map(k=>`<button class="chip ${eatC===k?'on':''}" data-c="${k}">${CATLBL[k]}</button>`).join('')}</div>`;
-  h+=`<div class="chips"><button class="chip ${eatA==='all'?'on':''}" data-a2="all">全部地區</button>${EAREA_ORDER.map(k=>`<button class="chip ${eatA===k?'on':''}" data-a2="${k}">${AREA[k]}</button>`).join('')}</div>`;
-  h+=`<div class="notice">🛒 <b>超市提醒：</b>西班牙週日與國定假日（1/1、1/6）多數超市休息，建議 1/2 或 1/5 先把水、早餐與零食買好。各區內依價位由低到高排序。標 ⚠️ 的店資料較舊或位置概略，出發前請用地圖連結確認；價格僅供參考。</div><div class="notice">🍰 <b>你這趟必吃的甜點：</b>1/6 前後是三王節，麵包店會賣 <b>Tortell de Reis（國王蛋糕，內藏小驚喜）</b>；另外別錯過 <b>Xuixo</b>（炸卡士達捲）、<b>Crema catalana</b>（加泰隆尼亞烤布蕾）、<b>Mel i Mató</b>（鮮乳酪淋蜂蜜）、<b>Churros 配熱巧克力</b>（見咖啡分類的 Granja 店）。</div>`;
+  h+=`<div class="chips" style="top:46px"><button class="chip ${eatA==='all'?'on':''}" data-a2="all">全部地區</button>${EAREA_ORDER.map(k=>`<button class="chip ${eatA===k?'on':''}" data-a2="${k}">${AREA[k]}</button>`).join('')}</div>`;
+  h+=`<p class="notice">🛒 週日與國定假日多數超市休息，建議事先買好水與早餐。🍰 三王節前後有 Tortell de Reis（國王蛋糕），也別錯過 Xuixo、Crema catalana、Churros。各區內依價位低→高；價位為估計，標 ⚠️ 請出發前確認。</p>`;
   const list=EATS.filter(e=>(eatC==='all'||e.cat===eatC)&&(eatA==='all'||e.near===eatA));
-  EAREA_ORDER.forEach(k=>{const it=list.filter(e=>e.near===k).sort((a,b)=>a.p-b.p);if(!it.length)return;h+=`<div class="sec">${AREA[k]}</div>`+it.map(eatCard).join('');});
-  list.forEach(e=>{const m=L.marker([e.lat,e.lng],{icon:pin(CATCOL[e.cat],e.ic)}).addTo(layer).bindPopup(`<b>${e.n}</b><br>${e.why}`);m.on('click',()=>sel(e.id));mk[e.id]=m;pts.push([e.lat,e.lng]);});
+  EAREA_ORDER.forEach(k=>{const it=list.filter(e=>e.near===k).sort((a,b)=>a.p-b.p);if(!it.length)return;h+=`<div class="sec">${AREA[k]}</div>`+it.map(eatAcc).join('');it.forEach(e=>addMk(e,e.ic,CATCOL[e.cat]));});
  }
- side.innerHTML=h;
- side.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{if(tab===1)dayF=+b.dataset.d;else if(tab===2)anchF=b.dataset.a;else{if(b.dataset.c)eatC=b.dataset.c;if(b.dataset.a2)eatA=b.dataset.a2;}render()});
- side.querySelectorAll('.card').forEach(c=>c.onclick=e=>{if(e.target.tagName==='A')return;sel(c.dataset.id,true)});
- const useful=pts.filter((p,i)=>i>0||pts.length===1);
- if(tab===1&&dayF===0){map.setView([41.3925,2.165],11)} else if(useful.length){map.fitBounds(L.latLngBounds(pts).pad(.25),{maxZoom:14})}
- setTimeout(()=>map.invalidateSize(),50);
- if(typeof syncGoogle==='function'&&gm.style.display!=='none'&&!curSelKeep){curSel=null;syncGoogle()}
+ $('side').innerHTML=h;
+ if(tab===1&&dayF===0)map.setView(CONFIG.mapCenter,CONFIG.mapZoomAll||11);
+ else if(pts.length>1)map.fitBounds(L.latLngBounds(pts).pad(.25),{maxZoom:14});
 }
-const gm=document.getElementById('gm');
-const embed=q=>gm.src='https://maps.google.com/maps?hl='+LANG+'&z=15&output=embed&q='+encodeURIComponent(q);
-const embedRoute=(stops)=>gm.src='https://maps.google.com/maps?hl='+LANG+'&output=embed&dirflg=r&saddr='+encodeURIComponent('Plaça de Catalunya, Barcelona')+'&daddr='+stops.map(encodeURIComponent).join('+to:');
-const findObj=id=>FIX.find(x=>x.id===id)||PICKS.find(x=>x.id===id)||EATS.find(x=>x.id===id);
-function dayRouteUrl(d){const fx=FIX.filter(f=>f.day===d).sort((a,b)=>a.ord-b.ord);if(!fx.length)return null;
- const last=fx[fx.length-1],wp=fx.slice(0,-1).map(f=>f.lat+','+f.lng).join('|');
- return `https://www.google.com/maps/dir/?api=1&hl=${LANG}&travelmode=transit&origin=${encodeURIComponent('Plaça de Catalunya Barcelona')}&destination=${last.lat},${last.lng}`+(wp?`&waypoints=${encodeURIComponent(wp)}`:'');}
-function showGoogle(){document.getElementById('map').style.display='none';gm.style.display='block';mG.classList.add('on');mO.classList.remove('on')}
-function showOverview(){gm.style.display='none';document.getElementById('map').style.display='block';mO.classList.add('on');mG.classList.remove('on');setTimeout(()=>map.invalidateSize(),50)}
-const mG=document.getElementById('mG'),mO=document.getElementById('mO');
-mG.onclick=showGoogle;mO.onclick=showOverview;
+
+/* ----- 互動 ----- */
+function sel(id){
+ curSel=id;
+ if(!mk[id]){const o=findObj(id);if(o){const m=L.marker([o.lat,o.lng],{icon:pin('#ff3b6b',o.ic||'★')}).addTo(layer).bindPopup(`<b>${o.n}</b>`);mk[id]=m}}
+ document.querySelectorAll('.ac').forEach(c=>c.classList.toggle('sel',c.dataset.id===id));
+ if(mob()&&!sheetOpen)openSheet(true);else syncGoogle();
+ const m=mk[id];if(m){setTimeout(()=>{map.flyTo(m.getLatLng(),14);m.openPopup()},280)}
+}
+$('side').addEventListener('click',e=>{
+ const t=e.target.closest('[data-d],[data-a],[data-c],[data-a2],[data-acc],[data-map],[data-dayt]');if(!t)return;
+ if(t.dataset.map){e.preventDefault();sel(t.dataset.map);return}
+ if(t.dataset.acc){const ac=t.closest('.ac');const was=ac.classList.contains('open');document.querySelectorAll('.ac.open').forEach(x=>x.classList.remove('open'));if(!was){ac.classList.add('open');openId=t.dataset.acc}else openId=null;return}
+ if(t.dataset.dayt){const d=+t.dataset.dayt;const el=t.closest('.day');el.classList.toggle('open');el.classList.contains('open')?openDays.add(d):openDays.delete(d);return}
+ if(t.dataset.d!==undefined){dayF=+t.dataset.d;if(dayF)openDays.add(dayF);curSel=null}
+ else if(t.dataset.a!==undefined)anchF=t.dataset.a;
+ else if(t.dataset.c)eatC=t.dataset.c;
+ else if(t.dataset.a2)eatA=t.dataset.a2;
+ render();$('side').scrollTop=0;syncGoogle();
+});
+function goTab(n){tab=n;curSel=null;openId=null;document.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',+b.dataset.t===n));render();$('side').scrollTop=0;syncGoogle()}
+document.querySelectorAll('#dtabs [data-t],#nav [data-t]').forEach(b=>b.onclick=()=>goTab(+b.dataset.t));
+$('navMap').onclick=()=>openSheet(!sheetOpen);
+$('mClose').onclick=()=>openSheet(false);
+$('mapToggle').onclick=()=>setMapHidden(!mapHidden);
+$('mG').onclick=()=>showMode(true);$('mO').onclick=()=>showMode(false);
+const menu=$('menu');$('menuBtn').onclick=e=>{e.stopPropagation();const o=menu.classList.toggle('open');$('menuBtn').setAttribute('aria-expanded',o)};
+document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==$('menuBtn'))menu.classList.remove('open')});
 document.querySelectorAll('#lg button').forEach(b=>b.onclick=()=>{LANG=b.dataset.l;document.querySelectorAll('#lg button').forEach(x=>x.classList.toggle('on',x===b));render();syncGoogle()});
-let curSel=null;
-function syncGoogle(){const o=curSel&&findObj(curSel);if(o)embed((o.en||o.n)+' '+o.addr+' Barcelona');else if(tab===1&&dayF){const fx=FIX.filter(f=>f.day===dayF).sort((a,b)=>a.ord-b.ord);if(fx.length)embedRoute(fx.map(f=>f.lat+','+f.lng));else embed('Plaça de Catalunya Barcelona')}else embed('Plaça de Catalunya Barcelona');}
-function sel(id,fly){curSel=id;if(gm.style.display!=='none')syncGoogle();
- document.querySelectorAll('.card').forEach(c=>c.classList.toggle('sel',c.dataset.id===id));
- const el=document.querySelector(`.card[data-id="${id}"]`); if(el&&!fly)el.scrollIntoView({behavior:'smooth',block:'center'});
- const m=mk[id]; if(m){ if(fly)map.flyTo(m.getLatLng(),14); m.openPopup(); }
-}
-const TB=[t1,t2,t3];
-function goTab(n){tab=n;TB.forEach((b,i)=>b.classList.toggle('on',i===n-1));curSel=null;render();syncGoogle()}
-t1.onclick=()=>goTab(1);t2.onclick=()=>goTab(2);t3.onclick=()=>goTab(3);
+matchMedia('(max-width:820px)').addEventListener('change',()=>{sheetOpen=false;$('mapwrap').classList.remove('open');$('navMap').classList.remove('on');syncGoogle();setTimeout(()=>map.invalidateSize(),100)});
 render();syncGoogle();
 </script>
 </body>
