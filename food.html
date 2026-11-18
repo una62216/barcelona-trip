@@ -33,6 +33,7 @@ h3 small{color:var(--mut);font-weight:400;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
 .card .n{font-weight:700}
+.sd{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;border:2px solid var(--card);box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 .card .a{font-size:13px;color:var(--mut)}
 .card .t{font-size:13px}
 .card .go{margin-top:4px;font-size:13px}
@@ -65,6 +66,7 @@ footer{padding:30px 16px;color:var(--mut);font-size:13px;text-align:center}
 
 <p style="text-align:center"><a href="index.html">← 回到行程地圖 / Back to itinerary map</a></p>
 <footer>
+圓點 🔴🟠🟢 是該地址所在區域的治安燈號（依街區概略判斷，不代表單一店家），詳見 <a href="safety.html">治安地圖</a>。<br>
 資料來源：書籍《巴塞隆納，不只高第》附錄 + 網路查證（Michelin 2026、TMB、Ara、Barcelona Secreta、Tablao Cordobés 官網等）。<br>
 營業時間與星級常變動，訂位前請看官網或 Google Maps。本頁無法逐家保證 100% 即時。
 </footer>
@@ -244,6 +246,13 @@ const PL={1:'💲 省',2:'💲💲 中',3:'💲💲💲 偏高'};
 // 太高端：略過整個米其林區塊與下列店家
 const DROP=new Set(['Blanc by Carme Ruscalleda','L\'Eggs - Paco Pérez','Osmosis','Roig Robí','Botafumeiro','Casa Darío','Suquet de l\'Almirall','Torre d\'Alta Mar','Windsor','Bravo 24','Xavier Pellicer','Con Gracia','Asador de Aranda','Oria','Dos Cielos','Restaurante Evo',
  'Passeig de Gràcia 精品街','Loewe 皮件','Tous 首飾','Custo Barcelona','Adolfo Domínguez','Lladró 瓷偶','Aleia','Monvínic','Lasarte','ABaC','Enigma','Mont Bar','Moments','Disfrutar']);
+
+// ===== 治安燈號（依地址所在區域概略判斷，非單一店家；與 safety.html 的區域一致）=====
+const SAFE_RED=/Rambla del Raval|La Rambla|Escudellers|Avinyó|Bellafila|C\/Sant Pau|Plaça Reial|Pl\. Reial|Sobradiel|C\/Arcs|Plaça Nova|Pl\. Nova|Josep Oriol|Plaça del Pi|Portal de l'Àngel|C\/Plata|C\/Unió|Av\. de les Drassanes|Plaça de Catalunya|C\/Palau 5|C\/Vidre|Espalter/;
+const SAFE_ORA=/Montcada|Flassaders|Argenteria|C\/Rec|Sant Antoni dels Sombrers|Assaonadors|C\/Moles|Tallers|Ripoll|Elisabets|Ronda de Sant Antoni|Copons|Via Laietana|Passeig de Gràcia|Rambla de Catalunya|Passatge de la Concepció|Baluart|Balboa|Sant Carles|C\/Escar|Joan de Borbó|C\/Marina|Moll d'Espanya|Palau de Mar|Port Vell|Litoral|Moll Drassanes|Pl\. Sagrada Família|Palau de la Música|Pla de Palau|Pl\. Pau Vila|Reina Cristina|Bergara|C\/Casp|Dr\. Dou|Lledó/;
+const SAFE_COL={red:'#d93a3a',ora:'#ee8a1f',grn:'#2e9b57'};
+function safeOf(a){a=a||'';if(SAFE_RED.test(a))return 'red';if(SAFE_ORA.test(a))return 'ora';return 'grn'}
+const sdot=a=>`<i class="sd" style="background:${SAFE_COL[safeOf(a)]}"></i>`;
 function prep(g){ if(/米其林/.test(g.t))return null;
  const items=g.items.filter(i=>!DROP.has(i[0])).map((i,k)=>({i,k,p:P[i[0]]||2}));
  items.sort((a,b)=>a.p-b.p||a.k-b.k);
@@ -253,7 +262,7 @@ function tagHtml(tags){return (tags||[]).filter(t=>t!=='mapless').map(t=>({s3:['
 function card(it){
  const [n,a,note,tags]=it; const dead=(tags||[]).includes('dead');
  const pl=P[n]?`<span class="tag" style="background:#2e7d32">${PL[P[n]]}</span>`:'';
- return `<div class="card ${dead?'dead-card':''}" data-s="${(n+' '+(a||'')+' '+(note||'')).toLowerCase()}"><div class="n">${n}</div><div>${pl}${tagHtml(tags)}</div>${a?`<div class="a">${a}</div>`:''}${note?`<div class="t">${note}</div>`:''}${(tags||[]).includes('mapless')?'':link(n,a)}</div>`;
+ return `<div class="card ${dead?'dead-card':''}" data-s="${(n+' '+(a||'')+' '+(note||'')).toLowerCase()}"><div class="n">${sdot(a)}${n}</div><div>${pl}${tagHtml(tags)}</div>${a?`<div class="a">${a}</div>`:''}${note?`<div class="t">${note}</div>`:''}${(tags||[]).includes('mapless')?'':link(n,a)}</div>`;
 }
 let html='';
 for(const s of sections){
