@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>巴塞隆納治安地圖 2026 下半年</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--bg:#f4f1ec;--card:#fff;--ink:#1c1b1a;--mut:#74706a;--line:#e7e2da;--brand:#ff5a36;--pill:#efeae2;--shadow:0 4px 16px rgba(40,30,20,.08);--red:#d93a3a;--ora:#ee8a1f;--grn:#2e9b57}
+@media(prefers-color-scheme:dark){:root{--bg:#161412;--card:#221f1c;--ink:#f3eee8;--mut:#a9a199;--line:#37322d;--pill:#2f2a26;--shadow:0 4px 16px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand);text-decoration:none}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.top b{font-size:16px}.top .sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px 60px}
+.hero{margin:14px 0;background:linear-gradient(135deg,#d93a3a,#ee8a1f 55%,#2e9b57);color:#fff;border-radius:20px;padding:18px}
+.hero h1{margin:0 0 4px;font-size:22px}.hero p{margin:4px 0;font-size:14px;opacity:.95}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px;margin:0 0 12px}
+.card h2{margin:0 0 6px;font-size:17px}
+.note{font-size:12.5px;color:var(--mut);line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.stat{background:var(--pill);border-radius:12px;padding:10px}
+.stat b{display:block;font-size:20px}.stat span{font-size:12.5px;color:var(--mut)}
+.mapbar{display:flex;gap:6px;align-items:center;margin:0 0 8px;flex-wrap:wrap}
+#map{height:46vh;min-height:300px;border-radius:16px;border:1px solid var(--line);margin-bottom:10px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 13px;border-radius:99px;font:inherit;font-size:13.5px;min-height:38px;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;margin:4px 0 8px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+.z{border-left:6px solid var(--c);background:var(--card);border-radius:14px;box-shadow:var(--shadow);margin:0 0 10px}
+.z button{display:flex;width:100%;gap:10px;align-items:center;text-align:left;border:0;background:transparent;color:inherit;font:inherit;padding:12px;min-height:56px;cursor:pointer}
+.z .t{flex:1}.z .t b{display:block}.z .t small{color:var(--mut);font-size:12.5px}
+.z .b{display:none;padding:0 12px 12px;font-size:14px}
+.z.open .b{display:block}
+.z .go{margin-top:8px}
+.lv{font-size:12px;color:#fff;background:var(--c);padding:2px 9px;border-radius:99px;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600}
+.tb{overflow-x:auto}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.sos{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.sos a{background:var(--pill);border-radius:12px;padding:10px;color:var(--ink);display:block}
+.sos b{display:block;font-size:18px;color:var(--red)}
+@media(max-width:560px){#map.hide{display:none}}
+</style>
+</head>
+<body>
+<div class="top"><a href="index.html" class="btn">← 行程地圖</a><b>🛡️ 治安地圖</b><span class="sp"></span><button class="btn" id="mapT">🗺️ 隱藏地圖</button></div>
+<div class="wrap">
+ <div class="hero">
+  <h1>巴塞隆納治安地圖 · 2026 下半年</h1>
+  <p>整理日期：2026/11/18｜適用行程：2027/1/1–1/9</p>
+  <p>整體來說：暴力犯罪對遊客少見，<b>主要風險是扒手與調包詐騙</b>。重點是知道「哪裡人多、哪裡夜間要小心」。</p>
+ </div>
+
+ <div class="card">
+  <h2>📊 數據怎麼看</h2>
+  <div class="stats">
+   <div class="stat"><b>−11.2%</b><span>2026 上半年全市犯罪（市府新聞標題）</span></div>
+   <div class="stat"><b>−21%</b><span>2026 上半年竊盜（EFE 報導；件數 35,092，另有來源寫 30,650）</span></div>
+   <div class="stat"><b>−40%</b><span>大眾運輸 TMB 犯罪（Pla Kanpai 計畫，被捕扒手 85 人）</span></div>
+   <div class="stat"><b>9 vs 5</b><span>上半年凶殺案（與組織犯罪有關，非針對遊客）</span></div>
+  </div>
+  <p class="note">⚠️ <b>2026 下半年的官方統計尚未發布</b>（通常隔年初公布），所以這裡用「上半年數據＋近期報導」。各來源數字不一致：暴力搶劫有的寫 −29.1%、有的寫 +3.2%；另有一個來源提到 3 月旅遊區竊盜比 2 月多 15%。以上多半是新聞與旅遊網站，不是官方分區統計，請當成趨勢參考。官方數據請看 Mossos d'Esquadra 與巴塞隆納市府網站。</p>
+ </div>
+
+ <div class="card">
+  <h2>🗺️ 風險區域地圖</h2>
+  <div class="lg"><span><i class="dot" style="background:var(--red)"></i>紅：扒手最密集／夜間要特別小心</span><span><i class="dot" style="background:var(--ora)"></i>橘：人潮多，注意隨身物品</span><span><i class="dot" style="background:var(--grn)"></i>綠：相對安全（仍要保持警覺）</span><span>📍 地鐵熱點站</span></div>
+  <div class="chips" id="chips"></div>
+  <div id="map"></div>
+  <p class="note">區域範圍是依多個旅遊指南與新聞整理的<b>概略範圍</b>，不是官方分區，也不代表區內每條街都一樣。實際請以現場情況為準。</p>
+ </div>
+
+ <div id="zones"></div>
+
+ <div class="card">
+  <h2>🎯 你的行程景點：風險與提醒</h2>
+  <div class="tb"><table>
+   <tr><th>景點／日期</th><th>風險</th><th>怎麼做</th></tr>
+   <tr><td>巴特由、米拉（1/1）</td><td>🟠 中</td><td>Passeig de Gràcia 精品街與地鐵站有扒手；包包斜背放身前，拍照時別把手機放在路邊桌上。</td></tr>
+   <tr><td>桂爾公園（1/2）</td><td>🟠 中</td><td>公車 24 與入口處人擠，手機和錢包放內袋；公園內人多拍照時留意背包。</td></tr>
+   <tr><td>聖家堂（1/2）</td><td>🟠 中</td><td>排隊與周邊廣場人潮多；證件影本隨身、正本放住處。</td></tr>
+   <tr><td>Sant Antoni 市集、Fira de Reis（1/3）</td><td>🟠 中</td><td>市集人擠，包包放胸前；買東西時只拿小額現金。</td></tr>
+   <tr><td>球賽 Cornellà（1/3）</td><td>🟠 中</td><td>德比日人潮大、地鐵擠；賽前賽後搭車時小心扒手，不帶多餘貴重物品。</td></tr>
+   <tr><td>聖山（1/4）</td><td>🟢 低</td><td>山上人少，但 Plaça Espanya 的火車起點人多，留意行李。</td></tr>
+   <tr><td>Figueres 達利博物館（1/5）</td><td>🟢 低</td><td>小城鎮，一般注意即可；回程火車別睡著放行李在架上。</td></tr>
+   <tr><td>Montjuïc（1/6）</td><td>🟢 低～🟠</td><td>白天人潮分散；天黑後下山避開偏僻小徑，改搭纜車或地鐵。</td></tr>
+   <tr><td>哥德區、Rambla、Raval（1/7、1/9 市集）</td><td>🔴 高</td><td>白天逛可以，但扒手最密集；晚上避免走小巷，回程搭計程車或走大馬路。</td></tr>
+   <tr><td>Barceloneta／港口（1/8）</td><td>🟠 中</td><td>人潮多，海邊酒吧有零星飲料下藥通報（單一來源）；別離開自己的飲料。</td></tr>
+  </table></div>
+ </div>
+
+ <div class="card">
+  <h2>🚇 地鐵與大眾運輸</h2>
+  <ul>
+   <li>來源多半點名 <b>L1、L3、L4</b> 較多扒手，熱點站：<b>Plaça de Catalunya、Passeig de Gràcia、Drassanes</b>。</li>
+   <li>尖峰擠車和<b>車門快關上的瞬間</b>是扒手最愛的時機。</li>
+   <li>Pla Kanpai 計畫讓大眾運輸犯罪下降，但站內仍要留意；包包拉鍊朝向身體、手機別拿在手上站在車門邊。</li>
+   <li>晚上返回住處優先選亮、人多的大馬路；叫車可用 Cabify / FreeNow 等合法叫車 App（Uber 狀況請出發前確認）。</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h2>🎭 常見詐騙手法</h2>
+  <ul>
+   <li><b>假警察</b>：自稱便衣要查你的錢包或護照，不要交出，說要去警察局處理。書上也提到，真警察多半不太會英文。</li>
+   <li><b>分散注意力</b>：有人問路、灑東西在你衣服上、強塞花或手環，同夥趁機下手。</li>
+   <li><b>咖啡廳桌上的手機</b>：放在桌邊或椅背的包包很容易被順走。</li>
+   <li><b>夜店飲料</b>：在 Barceloneta 等旅遊夜店有零星下藥通報，別接受陌生人的飲料。</li>
+   <li><b>低頭拍照時</b>：背包放前面；人多的景點尤其危險。</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h2>📞 緊急聯絡</h2>
+  <div class="sos">
+   <a href="tel:112"><b>112</b>歐盟通用緊急電話</a>
+   <a href="tel:091"><b>091</b>國家警察（Policía Nacional）</a>
+   <a href="tel:088"><b>088</b>加泰警察 Mossos d'Esquadra</a>
+   <a href="tel:092"><b>092</b>市警 Guàrdia Urbana</a>
+  </div>
+  <p class="note">報案與遺失護照：到警察局報案取得遺失證明，再聯絡駐西班牙台北經濟文化辦事處（地址電話請以<a href="https://www.boca.gov.tw/" target="_blank" rel="noopener">外交部領事事務局</a>最新資料為準）。外交部旅外緊急聯絡專線國際免付費 +800-0885-0885（請出發前再確認可用性）。信用卡被盜刷或遺失請立即掛失。</p>
+ </div>
+
+ <div class="card">
+  <h2>🔗 資料來源</h2>
+  <ul class="note">
+   <li><a href="https://barcelonaurbana.com/en/blog/barcelona-safety-guide" target="_blank" rel="noopener">Barcelona Urbana：Is Barcelona Safe?（2026 上半年數字）</a></li>
+   <li><a href="https://barcelonaurbana.com/en/blog/barcelona-pickpockets-zones-tourist-guide" target="_blank" rel="noopener">Barcelona Urbana：Pickpockets zones guide 2026</a></li>
+   <li><a href="https://www.barcelona.cat/infobarcelona/ca/tema/seguretat-i-prevencio/la-criminalitat-baixa-un-112-a-barcelona-amb-el-reforc-dels-dispositius-policials-i-de-proximitat_40071.html" target="_blank" rel="noopener">巴塞隆納市府：犯罪下降 11.2%</a></li>
+   <li><a href="https://www.eldebate.com/espana/cataluna/20260720/barcelona-reduce-delincuencia-112-homicidios-disparan-crimen-organizado_441576.html" target="_blank" rel="noopener">El Debate（EFE）：上半年竊盜與凶殺案</a></li>
+   <li><a href="https://www.moncloa.com/2026/05/23/pla-kanpai-delincuencia-tmb-40-3379117/" target="_blank" rel="noopener">Moncloa：Pla Kanpai TMB 犯罪下降 40%</a></li>
+   <li><a href="https://www.theolivepress.es/spain-news/2026/03/07/spain-most-dangerous-neighbourhoods-el-raval-barcelona" target="_blank" rel="noopener">The Olive Press：El Raval 治安報導（2026/3）</a></li>
+   <li><a href="https://saily.com/blog/is-barcelona-safe-to-visit/" target="_blank" rel="noopener">Saily：Barcelona 2026 safety guide</a></li>
+  </ul>
+ </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const RED='#d93a3a',ORA='#ee8a1f',GRN='#2e9b57';
+const LV={red:['🔴 高風險',RED],ora:['🟠 中風險',ORA],grn:['🟢 較安全',GRN]};
+// 區域（概略範圍）。poly: [[lat,lng],...]  circle: [lat,lng,radius_m]
+const ZONES=[
+{id:'z1',lv:'red',n:'La Rambla（全段，尤其下段近 Drassanes／哥倫布）',poly:[[41.3877,2.1688],[41.3877,2.1718],[41.3756,2.1798],[41.3748,2.1758]],
+ why:'來源一致點名為扒手最密集區之一；餐廳外攬客與街頭表演也常是分散注意力的手法。',tip:'白天走過可以，不要停下來滑手機；包包斜背放前面；晚上避免久留。'},
+{id:'z2',lv:'red',n:'哥德區 Barri Gòtic（夜間小巷）',poly:[[41.3862,2.1738],[41.3862,2.1792],[41.3790,2.1792],[41.3790,2.1738]],
+ why:'遊客多、小巷多、夜間照明差，被點名為 Ciutat Vella 扒手壓力最大的區域。',tip:'白天逛大教堂與 Plaça Sant Jaume 沒問題；晚上走寬的街道，離開時搭計程車更安心。'},
+{id:'z3',lv:'red',n:'El Raval 南段（Sant Pau 一帶，Rambla del Raval 夜間）',poly:[[41.3800,2.1650],[41.3800,2.1722],[41.3742,2.1712],[41.3742,2.1650]],
+ why:'2026/3 報導將 El Raval 列為西班牙治安關注度高的社區之一；但不同旅遊指南說法不一。',tip:'避免天黑後走小巷與地下道；不要在街頭拿出貴重物品；白天可逛博物館與市集。'},
+{id:'z4',lv:'ora',n:'El Raval 北段、Plaça Universitat 周邊',poly:[[41.3875,2.1630],[41.3875,2.1715],[41.3802,2.1715],[41.3802,2.1630]],
+ why:'靠近大學與 Plaça Catalunya，白天正常，夜間與 Raval 南段交界要小心。',tip:'夜間走大馬路（Ronda Universitat、Ronda Sant Antoni）而不是小巷。'},
+{id:'z5',lv:'ora',n:'Born／Sant Pere（Santa Caterina、Picasso 博物館周邊）',poly:[[41.3875,2.1790],[41.3875,2.1868],[41.3822,2.1868],[41.3822,2.1790]],
+ why:'旅遊餐廳與酒吧集中，人潮多；一般指南列為需留意隨身物品的區域。',tip:'餐廳露天座位把包包放在腿上或繞住椅腳。'},
+{id:'z6',lv:'ora',n:'Barceloneta 與港口、海灘',poly:[[41.3815,2.1835],[41.3815,2.1940],[41.3720,2.1940],[41.3720,2.1835]],
+ why:'海灘與酒吧街人潮多；有來源提到旅遊夜店有零星飲料下藥通報。',tip:'海邊別把背包放在沙灘上離開；夜店飲料不離手。'},
+{id:'z7',lv:'ora',n:'Passeig de Gràcia／Plaça Catalunya（巴特由、米拉）',circle:[41.3915,2.1655,430],
+ why:'精品街與景點集中；Plaça Catalunya、Passeig de Gràcia 地鐵站被點名為扒手熱點。',tip:'拍照時把包包放前面；地鐵站內留意貼近與推擠。'},
+{id:'z8',lv:'ora',n:'聖家堂周邊',circle:[41.4036,2.1744,420],
+ why:'世界級景點，排隊與廣場人潮多，一般為「人多的地方就有扒手」。',tip:'排隊時背包放胸前；證件正本放住處。'},
+{id:'z9',lv:'ora',n:'桂爾公園入口與公車站',circle:[41.4140,2.1535,320],
+ why:'公車 24 與入口人擠，上下車與進出公園時容易被分散注意力。',tip:'手機、錢包放內袋；不要把手機拿在手上走。'},
+{id:'z10',lv:'grn',n:'Eixample（住宅區，Passeig de Gràcia 以西）',poly:[[41.3985,2.1480],[41.3985,2.1600],[41.3790,2.1600],[41.3790,2.1480]],
+ why:'多份指南列為相對安全的住宿區：街道寬、住宅多、人流分散。',tip:'仍要留意手機與包包，但夜間走起來比老城區安心。'},
+{id:'z11',lv:'grn',n:'Gràcia',poly:[[41.4080,2.1480],[41.4080,2.1612],[41.3992,2.1612],[41.3992,2.1480]],
+ why:'當地人多、咖啡店與小店多的社區，一般指南視為較安全（本次搜尋沒找到專門的 Gràcia 評比）。',tip:'廣場夜間酒吧人多，注意酒後的隨身物品。'},
+{id:'z12',lv:'grn',n:'Sarrià–Sant Gervasi（上城區）',poly:[[41.4180,2.1000],[41.4180,2.1480],[41.3985,2.1480],[41.3985,2.1000]],
+ why:'被形容為安靜、安全的住宅區。',tip:'夜間大街上較安靜，交通回程要確認末班車。'},
+{id:'z13',lv:'grn',n:'Poble-sec（Montjuïc 山腳）',poly:[[41.3742,2.1560],[41.3742,2.1702],[41.3680,2.1702],[41.3680,2.1560]],
+ why:'有來源列為低風險社區，酒吧街 Carrer de Blai 在 1/6 晚餐會用到；靠 Paral·lel 大道一側夜間要多留意。',tip:'晚餐後走大馬路搭地鐵 L3 Poble Sec／Paral·lel。'},
+{id:'z14',lv:'grn',n:'Poblenou',poly:[[41.4065,2.1960],[41.4065,2.2110],[41.3950,2.2110],[41.3950,2.1960]],
+ why:'被指為較富裕、低風險的社區。',tip:'本次行程大多不會去。'}
+];
+// 地鐵熱點站（來源點名）
+const STATIONS=[
+{n:'Plaça de Catalunya（L1/L3）',lat:41.3870,lng:2.1700},
+{n:'Passeig de Gràcia（L3）',lat:41.3921,lng:2.1649},
+{n:'Drassanes（L3）',lat:41.3795,lng:2.1770}
+];
+const map=L.map('map',{scrollWheelZoom:false}).setView([41.395,2.17],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+const grp=L.layerGroup().addTo(map);let layers={};
+const stGrp=L.layerGroup().addTo(map);
+STATIONS.forEach(s=>L.marker([s.lat,s.lng]).addTo(stGrp).bindPopup('<b>📍 '+s.n+'</b><br>來源點名的扒手熱點站'));
+let filter='all';
+function drawMap(){
+ grp.clearLayers();layers={};
+ ZONES.filter(z=>filter==='all'||filter==='st'||z.lv===filter).forEach(z=>{
+  const col=LV[z.lv][1];
+  const o={color:col,weight:2,fillColor:col,fillOpacity:.28};
+  const l=z.poly?L.polygon(z.poly,o):L.circle([z.circle[0],z.circle[1]],{...o,radius:z.circle[2]});
+  l.addTo(grp).bindPopup('<b>'+LV[z.lv][0]+' '+z.n+'</b><br>'+z.why);
+  l.on('click',()=>openZone(z.id));layers[z.id]=l;
+ });
+ if(filter==='st')map.addLayer(stGrp);
+}
+const chipsDef=[['all','全部'],['red','🔴 高風險'],['ora','🟠 中風險'],['grn','🟢 較安全'],['st','📍 地鐵熱點']];
+document.getElementById('chips').innerHTML=chipsDef.map(c=>`<button class="chip ${c[0]==='all'?'on':''}" data-f="${c[0]}">${c[1]}</button>`).join('');
+function renderZones(){
+ const list=ZONES.filter(z=>filter==='all'||filter==='st'||z.lv===filter);
+ document.getElementById('zones').innerHTML=list.map(z=>{
+  const c=LV[z.lv][1];
+  const pt=z.poly?z.poly[0]:[z.circle[0],z.circle[1]];
+  return `<div class="z" id="${z.id}" style="--c:${c}"><button><span class="t"><b>${z.n}</b><small>${LV[z.lv][0]}</small></span><span class="lv">${LV[z.lv][0].split(' ')[1]}</span></button><div class="b"><p><b>為什麼：</b>${z.why}</p><p><b>怎麼做：</b>${z.tip}</p><a class="btn go" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(z.n.split('（')[0]+' Barcelona')}">📍 Google 地圖</a></div></div>`;
+ }).join('');
+ document.querySelectorAll('.z>button').forEach(b=>b.onclick=()=>{const z=b.parentElement;z.classList.toggle('open');if(z.classList.contains('open'))focusZone(z.id)});
+}
+function focusZone(id){const l=layers[id];if(!l)return;map.fitBounds(l.getBounds?l.getBounds():l.getBounds(),{maxZoom:15,padding:[20,20]});l.openPopup&&l.openPopup()}
+function openZone(id){const el=document.getElementById(id);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}}
+document.getElementById('chips').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;filter=b.dataset.f;document.querySelectorAll('#chips .chip').forEach(x=>x.classList.toggle('on',x===b));drawMap();renderZones();if(filter!=='st')map.setView([41.395,2.17],12)};
+document.getElementById('mapT').onclick=()=>{const m=document.getElementById('map');const h=m.classList.toggle('hide');m.style.display=h?'none':'block';document.getElementById('mapT').textContent=h?'🗺️ 顯示地圖':'🗺️ 隱藏地圖';if(!h)setTimeout(()=>map.invalidateSize(),50)};
+drawMap();renderZones();
+</script>
+</body>
+</html>
