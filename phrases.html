@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>西班牙文小筆記</title>
+<style>
+:root{--bg:#f4f1ec;--card:#fff;--ink:#1c1b1a;--mut:#74706a;--line:#e7e2da;--brand:#ff5a36;--pill:#efeae2;--shadow:0 4px 16px rgba(40,30,20,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#161412;--card:#221f1c;--ink:#f3eee8;--mut:#a9a199;--line:#37322d;--pill:#2f2a26;--shadow:0 4px 16px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:var(--brand);text-decoration:none}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.top b{font-size:16px}.sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+.btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 70px}
+.hero{margin:14px 0;background:linear-gradient(135deg,#f4a261,#e63946);color:#fff;border-radius:20px;padding:16px 18px}
+.hero h1{margin:0 0 4px;font-size:21px}.hero p{margin:3px 0;font-size:14px;opacity:.95}
+.tabs{display:flex;gap:6px;background:var(--pill);padding:4px;border-radius:99px;margin:0 0 12px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--ink);min-height:40px;border-radius:99px;font:inherit;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+h2{margin:18px 2px 8px;font-size:16px}
+.ph{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:10px 12px;margin:0 0 8px}
+.ph .tx{flex:1;min-width:0}
+.es{font-size:19px;font-weight:700;line-height:1.3}
+.zh{font-size:14.5px}
+.sy{font-size:12.5px;color:var(--mut)}
+.play{flex:none;width:52px;height:52px;border-radius:50%;border:0;background:var(--brand);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 3px 8px rgba(255,90,54,.35)}
+.play:active{transform:scale(.94)}
+.play.busy{background:var(--ink)}
+.tip{font-size:12.5px;color:var(--mut);margin:4px 2px 10px;line-height:1.55}
+.note{background:var(--card);border-radius:14px;padding:10px 12px;font-size:13px;color:var(--mut);margin:10px 0}
+.hide{display:none}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;display:none;z-index:50;max-width:90vw}
+</style>
+</head>
+<body>
+<div class="top"><a href="index.html" class="btn">← 行程地圖</a><b>🗣️ 西班牙文小筆記</b><span class="sp"></span><button class="btn" id="slow">🐢 慢速：關</button></div>
+<div class="wrap">
+ <div class="hero">
+  <h1>Hola! 旅行用西班牙文</h1>
+  <p>按右邊 <b>🔊</b> 聽發音，點「🐢 慢速」可放慢。</p>
+  <p>上面「我的筆記」是你手寫筆記整理，下面「推薦」是我挑的最簡單 10 句。</p>
+ </div>
+ <div class="tabs"><button class="on" data-t="mine">📝 我的筆記</button><button data-t="rec">⭐ 推薦 10 句</button></div>
+ <div id="mine"></div>
+ <div id="rec" class="hide"></div>
+ <div class="note">🔊 發音是用手機／瀏覽器內建的西班牙語語音朗讀，不同裝置聲音會不太一樣；如果沒有聲音，請確認手機沒有靜音，並在系統語音設定安裝「西班牙語」。中文諧音只是近似讀法，<b>以按鈕的發音為準</b>。西班牙本土會把 c／z 唸成英文的 th 音，這裡用簡單的「西」音表示。</div>
+</div>
+<div id="toast"></div>
+<script>
+// [西文, 中文, 諧音, 備註(可無)]
+const MINE=[
+{t:'👋 打招呼（你的筆記）',tip:'你的筆記寫：Buenos días 用到約 15:00 前；Buenas tardes 約 14:00–21:00；之後說 Buenas noches。',items:[
+ ['Hola','你好','歐拉'],
+ ['Buenos días','早上好','布耶諾斯 迪亞斯'],
+ ['Buenas tardes','下午好','布耶納斯 塔爾德斯'],
+ ['Buenas noches','晚上好／晚安','布耶納斯 諾切斯'],
+ ['Hola, ¿cómo estás?','你好，你好嗎？','歐拉，寇摩 艾斯塔斯'],
+ ['¿Qué tal?','你好嗎？／嗨（輕鬆版）','凱 塔爾'],
+ ['De nada','不客氣（回答 Gracias）','跌 那搭'],
+ ['Sí','是','西'],
+ ['Perdón','不好意思／對不起（= excuse me）','佩爾冬']]},
+{t:'☕ 點餐與咖啡（你的筆記）',items:[
+ ['Un café cortado, por favor','一杯濃縮加一點奶的咖啡','溫 咖啡 可塔多 波爾 法沃爾'],
+ ['Un café con leche','一杯咖啡加牛奶（拿鐵）','溫 咖啡 孔 累切'],
+ ['Un café solo','一杯黑咖啡（濃縮）','溫 咖啡 索羅'],
+ ['Caliente, por favor','請給我熱的','卡里恩特 波爾 法沃爾'],
+ ['El menú, por favor','請給我菜單','艾爾 梅努 波爾 法沃爾'],
+ ['Quiero esto','我要這個（手指著點）','基耶羅 艾斯托'],
+ ['Un momento, por favor','請等一下','溫 莫門托 波爾 法沃爾'],
+ ['La cuenta, por favor','請買單','拉 昆塔 波爾 法沃爾'],
+ ['Está delicioso','好吃！','艾斯塔 德里夕歐索'],
+ ['Está sabroso','很美味！','艾斯塔 薩布羅索'],
+ ['Paella','海鮮飯（唸起來像「帕耶亞」）','帕耶亞'],
+ ['¡Salud!','乾杯！','薩魯']]},
+{t:'❓ 問問題（你的筆記）',items:[
+ ['¿Cuánto es?','多少錢？','寬托 艾斯'],
+ ['¿Cuánto cuesta?','這個多少錢？','寬托 魁斯塔'],
+ ['¿Más grande?','大一點的？','馬斯 格蘭德'],
+ ['¿Más pequeño?','小一點的？','馬斯 佩克紐'],
+ ['¿Dónde está el baño?','廁所在哪裡？（= where\'s WC?）','東德 艾斯塔 艾爾 巴紐'],
+ ['Yo no hablo español','我不會說西班牙語','優 諾 阿布羅 艾斯帕紐']]}
+];
+const REC=[
+ ['Gracias','謝謝','葛拉西亞斯'],
+ ['Por favor','請（點餐、拜託都加）','波爾 法沃爾'],
+ ['Adiós','再見','阿迪歐斯'],
+ ['Disculpe','不好意思（叫服務生、請人讓路）','迪斯庫爾佩'],
+ ['Una mesa para dos, por favor','請給我兩人的位子','烏納 梅薩 帕拉 多斯 波爾 法沃爾'],
+ ['Agua, por favor','請給我水','阿瓜 波爾 法沃爾'],
+ ['¿Habla inglés?','你會說英文嗎？','阿布拉 因格雷斯'],
+ ['No entiendo','我聽不懂','諾 恩提恩多'],
+ ['¿Puedo pagar con tarjeta?','可以刷卡嗎？','普耶多 帕加爾 孔 塔爾赫塔'],
+ ['¡Ayuda!','救命！／請幫忙！','阿尤達']
+];
+const row=p=>`<div class="ph"><div class="tx"><div class="es">${p[0]}</div><div class="zh">${p[1]}</div><div class="sy">🔤 ${p[2]}</div></div><button class="play" data-s="${p[0].replace(/"/g,'&quot;')}" aria-label="播放發音">🔊</button></div>`;
+document.getElementById('mine').innerHTML=MINE.map(g=>`<h2>${g.t}</h2>${g.tip?`<div class="tip">${g.tip}</div>`:''}${g.items.map(row).join('')}`).join('');
+document.getElementById('rec').innerHTML=`<h2>⭐ 最簡單實用的 10 句</h2><div class="tip">只背這 10 句就夠用：先說 Hola，要東西說 Por favor，結束說 Gracias。</div>`+REC.map(row).join('');
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.getElementById('mine').classList.toggle('hide',b.dataset.t!=='mine');document.getElementById('rec').classList.toggle('hide',b.dataset.t!=='rec')});
+// ---- 發音 ----
+let slow=false,voices=[];
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',3200)};
+function loadVoices(){voices=(window.speechSynthesis?speechSynthesis.getVoices():[])||[]}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+function pickVoice(){
+ return voices.find(v=>v.lang==='es-ES')||voices.find(v=>/^es[-_]ES/i.test(v.lang))||voices.find(v=>/^es/i.test(v.lang))||null;
+}
+function speak(text,btn){
+ if(!('speechSynthesis' in window)){toast('這個瀏覽器不支援語音朗讀，請改用 Chrome 或 Safari');return}
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text.replace(/[¿¡]/g,''));
+ const v=pickVoice();u.lang=v?v.lang:'es-ES';if(v)u.voice=v;
+ u.rate=slow?0.6:0.9;
+ document.querySelectorAll('.play.busy').forEach(x=>x.classList.remove('busy'));
+ btn.classList.add('busy');
+ u.onend=u.onerror=()=>btn.classList.remove('busy');
+ speechSynthesis.speak(u);
+ if(!v&&voices.length)toast('找不到西班牙語語音，聲音可能不準；請到系統語音設定安裝西班牙語');
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.play');if(b)speak(b.dataset.s,b)});
+document.getElementById('slow').onclick=function(){slow=!slow;this.textContent='🐢 慢速：'+(slow?'開':'關');this.classList.toggle('on',slow)};
+</script>
+</body>
+</html>
