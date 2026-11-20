@@ -107,6 +107,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .todo b{display:block;margin-bottom:2px}
 .todo label{display:flex;gap:8px;align-items:flex-start;margin:4px 0;line-height:1.45}
 .todo input{margin-top:3px;flex:none}
+.wx{background:#e6f3ff;border-radius:12px;padding:8px 12px;margin:8px 0;font-size:13.5px;line-height:1.6;color:#13365c}
+@media(prefers-color-scheme:dark){.wx{background:#16293d;color:#bcd8f5}}
+.wx div{margin:2px 0}
+.wxall{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:2px 12px;margin:0 0 12px}
+.wxall summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.wxall p{margin:6px 0;font-size:13.5px}
+.wxall a{font-weight:600}
 .sec{margin:16px 2px 8px;font-weight:800;font-size:15px}
 .notice{font-size:12.5px;color:var(--mut);margin:12px 2px;line-height:1.55}
 /* ---------- 手機 ---------- */
@@ -266,12 +273,14 @@ function render(){
  const addMk=(o,ic,col)=>{const m=L.marker([o.lat,o.lng],{icon:pin(col,ic)}).addTo(layer).bindPopup(`<b>${o.n}</b>`);m.on('click',()=>sel(o.id));mk[o.id]=m;pts.push([o.lat,o.lng]);};
  if(tab===1){
   h+=`<div class="chips"><button class="chip ${dayF===0?'on':''}" data-d="0">全部</button>${DATES.map((d,i)=>`<button class="chip ${dayF===i+1?'on':''}" data-d="${i+1}">${d}</button>`).join('')}</div>`;
+  h+=(typeof WX_NOTE!=='undefined')?`<details class="wxall"><summary>🌤️ 天氣與穿搭總覽（1 月氣候平均）</summary><p>${WX_NOTE}</p><p>🌡️ 巴塞隆納 1 月：白天約 13–15°C、夜晚約 4–7°C；日照約 4 小時／天；降雨偏少但來源差異大（3–13 天／月）。</p><p>🧥 <b>建議帶：</b>發熱衣、毛衣或刷毛、防風防潑水外套（輕羽絨更好）、圍巾、帽子、薄手套（遊行、Montserrat、夜間用）、折疊傘、舒適防滑鞋、暖暖包。洋蔥式穿法最實用。</p><p>🔗 預報：<a target="_blank" rel="noopener" href="https://www.aemet.es/es/eltiempo/prediccion/municipios/barcelona-id08019">AEMET 巴塞隆納</a>｜<a target="_blank" rel="noopener" href="https://www.meteo.cat/">Meteocat</a>｜<a target="_blank" rel="noopener" href="https://www.windy.com/41.385/2.173">Windy 風速圖</a></p></details>`:'';
   const days=dayF?[DAYS[dayF-1]]:DAYS;
   for(const D of days){
    const fx=FIX.filter(f=>f.day===D.d).sort((a,b)=>a.ord-b.ord);
    const isOpen=dayF?true:openDays.has(D.d);
    const shown=new Set();let body='';
    body+=`<p class="dtxt">${D.s}</p>`;
+   if(typeof WX!=='undefined'&&WX[D.d]){const w=WX[D.d];body+=`<div class="wx"><b>🌤️ 天氣預估（氣候平均）</b><div>🌡️ ${w.t}</div><div>🌧️ ${w.r}</div><div>🌬️ ${w.w}</div><div>👕 <b>穿搭：</b>${w.c}</div></div>`;}
    if(D.adv)body+=`<div class="adv"><b>💡 重點與建議</b><br>${D.adv.replace(/\n/g,'<br>')}</div>`;
    if(D.todo&&D.todo.length)body+=`<div class="todo"><b>✅ 出發前待辦</b>${D.todo.map((t,i)=>`<label><input type="checkbox" data-td="${D.d}-${i}" ${TD[D.d+'-'+i]?'checked':''}><span>${t}</span></label>`).join('')}</div>`;
    const rt=dayRouteUrl(D.d);if(rt)body+=`<a class="rt" target="_blank" rel="noopener" href="${rt}">🧭 當日大眾運輸路線（Google 地圖）</a>`;
