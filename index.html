@@ -110,6 +110,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .wx{background:#e6f3ff;border-radius:12px;padding:8px 12px;margin:8px 0;font-size:13.5px;line-height:1.6;color:#13365c}
 @media(prefers-color-scheme:dark){.wx{background:#16293d;color:#bcd8f5}}
 .wx div{margin:2px 0}
+.wx summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;align-items:center;list-style:none}
+.wx summary::-webkit-details-marker{display:none}
+.wx summary::after{content:"▾";margin-left:auto;color:inherit;opacity:.7;transition:.2s}
+.wx[open] summary::after{transform:rotate(180deg)}
+.nowx .wx,.nowx .wxall{display:none}
 .wxall{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:2px 12px;margin:0 0 12px}
 .wxall summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
 .wxall p{margin:6px 0;font-size:13.5px}
@@ -144,6 +149,8 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="menu" id="menu">
     <h4>地圖語言 / Map language</h4>
     <div class="seg" id="lg"><button data-l="zh-TW" class="on">中文</button><button data-l="en">English</button></div>
+    <h4 style="margin-top:12px">天氣資訊 / Weather</h4>
+    <div class="seg" id="wxsw"><button data-w="on" class="on">🌤️ 顯示</button><button data-w="off">🙈 隱藏</button></div>
     <a class="lk" href="food.html">🍽️ 完整餐廳／購物／市集／爵士清單 →</a>
     <a class="lk" href="safety.html">🛡️ 治安地圖（2026 下半年）→</a>
     <a class="lk" href="phrases.html">🗣️ 西班牙文小筆記（含發音）→</a>
@@ -175,7 +182,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 <script>
 document.title=CONFIG.title;document.querySelector('.logo').innerHTML=CONFIG.logoHtml;document.getElementById('hdrNote').textContent=CONFIG.headerNote;
 let LANG='zh-TW',tab=1,dayF=0,anchF='all',eatC='all',eatA='all',curSel=null,openId=null,sheetOpen=false,mapHidden=false;
+const wxRange=t=>{const n=[...t.matchAll(/(\d+)–(\d+)°C/g)].flatMap(m=>[+m[1],+m[2]]);return n.length?Math.min(...n)+'–'+Math.max(...n)+'°C':''};
 const openDays=new Set([1]);
+let WXON=true;try{WXON=localStorage.getItem('trip-wx')!=='off'}catch(e){}
+function applyWx(){document.body.classList.toggle('nowx',!WXON);document.querySelectorAll('#wxsw button').forEach(b=>b.classList.toggle('on',(b.dataset.w==='on')===WXON))}
+document.addEventListener('DOMContentLoaded',()=>{});
 let TD={};try{TD=JSON.parse(localStorage.getItem('trip-todo')||'{}')}catch(e){}
 document.addEventListener('change',e=>{const c=e.target.closest&&e.target.closest('[data-td]');if(c){TD[c.dataset.td]=c.checked;try{localStorage.setItem('trip-todo',JSON.stringify(TD))}catch(x){}}});
 const mob=()=>matchMedia('(max-width:820px)').matches;
@@ -280,7 +291,7 @@ function render(){
    const isOpen=dayF?true:openDays.has(D.d);
    const shown=new Set();let body='';
    body+=`<p class="dtxt">${D.s}</p>`;
-   if(typeof WX!=='undefined'&&WX[D.d]){const w=WX[D.d];body+=`<div class="wx"><b>🌤️ 天氣預估（氣候平均）</b><div>🌡️ ${w.t}</div><div>🌧️ ${w.r}</div><div>🌬️ ${w.w}</div><div>👕 <b>穿搭：</b>${w.c}</div></div>`;}
+   if(typeof WX!=='undefined'&&WX[D.d]){const w=WX[D.d];body+=`<details class="wx"><summary>🌤️ 天氣與穿搭｜約 ${wxRange(w.t)}</summary><div>🌡️ ${w.t}</div><div>🌧️ ${w.r}</div><div>🌬️ ${w.w}</div><div>👕 <b>穿搭：</b>${w.c}</div><div style="opacity:.75;font-size:12px">（1 月氣候平均，不是預報）</div></details>`;}
    if(D.adv)body+=`<div class="adv"><b>💡 重點與建議</b><br>${D.adv.replace(/\n/g,'<br>')}</div>`;
    if(D.todo&&D.todo.length)body+=`<div class="todo"><b>✅ 出發前待辦</b>${D.todo.map((t,i)=>`<label><input type="checkbox" data-td="${D.d}-${i}" ${TD[D.d+'-'+i]?'checked':''}><span>${t}</span></label>`).join('')}</div>`;
    const rt=dayRouteUrl(D.d);if(rt)body+=`<a class="rt" target="_blank" rel="noopener" href="${rt}">🧭 當日大眾運輸路線（Google 地圖）</a>`;
@@ -345,6 +356,8 @@ const menu=$('menu');$('menuBtn').onclick=e=>{e.stopPropagation();const o=menu.c
 document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==$('menuBtn'))menu.classList.remove('open')});
 document.querySelectorAll('#lg button').forEach(b=>b.onclick=()=>{LANG=b.dataset.l;document.querySelectorAll('#lg button').forEach(x=>x.classList.toggle('on',x===b));render();syncGoogle()});
 matchMedia('(max-width:820px)').addEventListener('change',()=>{sheetOpen=false;$('mapwrap').classList.remove('open');$('navMap').classList.remove('on');syncGoogle();setTimeout(()=>map.invalidateSize(),100)});
+document.querySelectorAll('#wxsw button').forEach(b=>b.onclick=()=>{WXON=b.dataset.w==='on';try{localStorage.setItem('trip-wx',WXON?'on':'off')}catch(e){}applyWx()});
+applyWx();
 render();syncGoogle();
 </script>
 </body>
